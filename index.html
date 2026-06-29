@@ -49,6 +49,7 @@ body{
 .dark .fltrs .fbtn2:hover{background:#1e293b}
 
 .exec{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:12px}
+.exec2{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:12px;margin-top:-4px}
 .ec{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);text-align:center;border-top:3px solid #1e3a8a;transition:.15s}
 .dark .ec{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
 .ec .nv{font-size:20px;font-weight:800;line-height:1.2}
@@ -94,9 +95,14 @@ body{
 .dark .card h3{color:#60a5fa;border-color:#1e293b}
 .card h3 .bdg{background:#1e3a8a;color:#fff;font-size:9px;padding:2px 8px;border-radius:8px;font-weight:500}
 .dark .card h3 .bdg{background:#2563eb}
+.card h3 .exp{border:none;background:rgba(30,58,138,.08);color:#1e3a8a;cursor:pointer;font-size:14px;width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;transition:.2s;margin-inline-start:6px}
+.dark .card h3 .exp{background:rgba(96,165,250,.1);color:#60a5fa}
+.card h3 .exp:hover{background:rgba(30,58,138,.15)}
+.dark .card h3 .exp:hover{background:rgba(96,165,250,.2)}
 
-.cw{width:100%;height:300px;position:relative;margin:0}
-.cw-lg{height:420px}
+.cw{width:100%;height:300px;position:relative;margin:0;transition:height .3s ease}
+.cw-lg{height:420px;transition:height .3s ease}
+.cw.expanded,.cw-lg.expanded{height:70vh !important}
 canvas{width:100%!important;height:100%!important;display:block}
 
 .tw{overflow-x:auto;margin-top:5px;border-radius:8px;max-height:460px;overflow-y:auto}
@@ -122,17 +128,12 @@ tr:hover td{background:rgba(30,58,138,.04)}
 .ft .nm{font-size:15px;font-weight:700;color:#1e3a8a;margin-bottom:1px}
 .dark .ft .nm{color:#60a5fa}
 
-.bdg2{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600}
-.bdg-g{background:#e6f4ea;color:#1e7e34}.dark .bdg-g{background:rgba(30,126,52,.2);color:#34d399}
-.bdg-r{background:#fce8e6;color:#c5221f}.dark .bdg-r{background:rgba(197,34,31,.2);color:#f87171}
-.bdg-y{background:#fef7e0;color:#e37400}.dark .bdg-y{background:rgba(227,116,0,.2);color:#fbbf24}
-.bdg-gy{background:#f1f3f4;color:#5f6368}.dark .bdg-gy{background:rgba(95,99,104,.3);color:#94a3b8}
-
 @media(max-width:768px){
-  body{padding:8px}.grid{grid-template-columns:1fr}.exec{grid-template-columns:repeat(2,1fr)}
+  body{padding:8px}.grid{grid-template-columns:1fr}.exec,.exec2{grid-template-columns:repeat(2,1fr)}
   .fltrs{gap:4px}.fltrs select,.fltrs input{max-width:100%;font-size:10px}
   .hdr h1{font-size:15px}.ec .nv{font-size:16px}.ins-grid{grid-template-columns:1fr}
   .cw{height:240px}.cw-lg{height:340px}
+  .cw.expanded,.cw-lg.expanded{height:50vh !important}
 }
 </style>
 </head>
@@ -150,7 +151,7 @@ tr:hover td{background:rgba(30,58,138,.04)}
 
 <div class="fltrs" id="fltrs"></div>
 
-<div class="exec" id="exec"></div>
+<div id="execArea"></div>
 
 <div class="insights" id="insights"></div>
 
@@ -169,7 +170,7 @@ tr:hover td{background:rgba(30,58,138,.04)}
 
 <script>
 var API_URL = 'https://script.google.com/macros/s/AKfycbwBU25oSbMVh63iGu8PPDMPWKr_8BYzQxF4VPI8OnChCvAo5BuCSK-0QB-j6ZiVbS9cLw/exec';
-var RAW = [], REG_DATA = [], FO = {}, REG_FO = {}, D = {}, curTab = 0;
+var RAW = [], REG_DATA = [], FO = {}, REG_FO = {}, D = {}, RD = {}, curTab = 0;
 
 // ===== DARK MODE =====
 (function(){
@@ -194,11 +195,13 @@ function pct(v,t){return t?Math.round(v/t*1000)/10:0}
 
 // ===== DATA LOADING =====
 function loadData(){
-  document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div class="sp"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>';
+  document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div style="display:inline-block;width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#1e3a8a;border-radius:50%;animation:sp .6s linear infinite"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>';
   var s=document.createElement('script');
   s.src=API_URL+'?callback=handleData&action=all&_t='+Date.now();
   document.head.appendChild(s);
 }
+@keyframes sp{to{transform:rotate(360deg)}}
+
 function handleData(resp){
   RAW=resp.activations||[];
   REG_DATA=resp.registrations||[];
@@ -257,10 +260,10 @@ var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode
 
 function buildFilters(){
   var opts=function(arr){return arr.map(function(v){return '<option>'+v+'</option>'}).join('')};
-  var up=function(id,v){F[id]=v||''};
   var h='<label>من:</label><input type="date" id="fDf" value="'+FO.minDate+'" style="max-width:110px">';
   h+='<label>إلى:</label><input type="date" id="fDt" value="'+FO.maxDate+'" style="max-width:110px">';
   h+='<label>المحافظة:</label><select id="fG"><option value="">الكل</option>'+opts(REG_FO.governorates)+'</select>';
+  h+='<label>حالة التسجيل:</label><select id="fS"><option value="">الكل</option>'+opts(REG_FO.statuses)+'</select>';
   h+='<label>المركز:</label><select id="fC"><option value="">الكل</option>'+opts(FO.centers)+'</select>';
   h+='<label>المشروع:</label><select id="fP"><option value="">الكل</option>'+opts(FO.projects)+'</select>';
   h+='<label>النشاط:</label><select id="fA"><option value="">الكل</option>'+opts(FO.activities)+'</select>';
@@ -275,6 +278,7 @@ function readF(){
   F.dFrom=document.getElementById('fDf').value;
   F.dTo=document.getElementById('fDt').value;
   F.gov=document.getElementById('fG').value;
+  F.status=document.getElementById('fS').value;
   F.center=document.getElementById('fC').value;
   F.project=document.getElementById('fP').value;
   F.activity=document.getElementById('fA').value;
@@ -286,6 +290,7 @@ function resetF(){
   document.getElementById('fDf').value=FO.minDate;
   document.getElementById('fDt').value=FO.maxDate;
   document.getElementById('fG').value='';
+  document.getElementById('fS').value='';
   document.getElementById('fC').value='';
   document.getElementById('fP').value='';
   document.getElementById('fA').value='';
@@ -310,6 +315,7 @@ function filterRows(){
 function filterRegRows(){
   return REG_DATA.filter(function(r){
     if(F.gov && r.gov !== F.gov) return false;
+    if(F.status && r.status !== F.status) return false;
     return true
   })
 }
@@ -404,6 +410,17 @@ function computeReg(rows){
   out.sts=Object.keys(sts).sort().map(function(k){return {n:k,c:sts[k]}});
   out.govCount=Object.keys(govs).length;
   return out
+}
+
+// ===== EXPAND CHART =====
+function expandChart(id){
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.classList.toggle('expanded');
+  setTimeout(function(){
+    var tabs=document.querySelectorAll('.tab');
+    for(var i=0;i<tabs.length;i++)if(tabs[i].classList.contains('a')){[draw0,draw1,draw2,draw3,draw4][i](D);break}
+  },50)
 }
 
 // ===== CHARTS =====
@@ -523,14 +540,12 @@ function tblProj(arr,ttlH){
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+x.n+'</td><td>'+x.e+'</td><td><b>'+fmt(x.h)+'</b></td><td>'+pct(x.h,ttlH)+'%</td></tr>'
   });return h+'</table>'
 }
-
 function tblReg(arr){
   var h='<table><tr><th>#</th><th>المحافظة</th><th>إجمالي</th><th>مقبول</th><th>%</th><th>مرفوض</th><th>%</th><th>هولد</th><th>%</th></tr>';
   arr.forEach(function(x,i){
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right;font-weight:600">'+x.n+'</td><td><b>'+x.t+'</b></td><td style="color:#1e7e34;font-weight:600">'+x.acc+'</td><td>'+x.accPct+'%</td><td style="color:#c5221f;font-weight:600">'+x.rej+'</td><td>'+(x.t?Math.round(x.rej/x.t*1000)/10:'0')+'%</td><td style="color:#e37400;font-weight:600">'+x.hold+'</td><td>'+(x.t?Math.round(x.hold/x.t*1000)/10:'0')+'%</td></tr>'
   });return h+'</table>'
 }
-
 function tblRegDet(rows){
   var h='<table><tr><th>#</th><th>الاسم</th><th>المحافظة</th><th>حالة التسجيل</th><th>التاريخ</th></tr>';
   rows.forEach(function(r,i){
@@ -568,66 +583,82 @@ function genRegInsights(D2){
 }
 
 // ===== RENDER =====
+function eBtn(id){return'<button class="exp" onclick="expandChart(\''+id+'\')" title="تكبير/تصغير">⛶</button>'}
+
 function renderExec(D2){
-  var k={vols:D2.vols,entries:D2.entries,hours:D2.hours};
-  return '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+k.vols+'</div><div class="lb">المتطوعون</div></div>'+
-    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+k.entries+'</div><div class="lb">التفعيلات</div></div>'+
-    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#fbbf24':'#d97706')+'">'+fmt(k.hours)+'</div><div class="lb">الساعات</div></div>'+
+  return '<div class="exec">'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+D2.vols+'</div><div class="lb">المتطوعون</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+D2.entries+'</div><div class="lb">التفعيلات</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#fbbf24':'#d97706')+'">'+fmt(D2.hours)+'</div><div class="lb">الساعات</div></div>'+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#a78bfa':'#7c3aed')+'">'+D2.goalPct+'%</div><div class="lb">تحقيق المستهدف</div></div>'+
     (D2.acts.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+';font-size:15px">'+D2.acts[0].n+'</div><div class="lb">أعلى نشاط ('+fmt(D2.acts[0].h)+' س)</div></div>':'')+
     (D2.cents.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+';font-size:15px">'+D2.cents[0].n+'</div><div class="lb">أعلى مركز ('+fmt(D2.cents[0].h)+' س)</div></div>':'')+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+D2.satAvg.toFixed(2)+'</div><div class="lb">الرضا /5</div></div>'+
-    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.prob.y||'0')+'</div><div class="lb">مشكلات</div></div>'
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.prob.y||'0')+'</div><div class="lb">مشكلات</div></div></div>'
 }
 
 function renderExecReg(D2){
-  return '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+D2.total+'</div><div class="lb">إجمالي التسجيلات</div></div>'+
+  return '<div class="exec2">'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+D2.total+'</div><div class="lb">إجمالي التسجيلات</div></div>'+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+D2.acc+'</div><div class="lb">مقبول ('+D2.accPct+'%)</div></div>'+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+D2.rej+'</div><div class="lb">مرفوض ('+D2.rejPct+'%)</div></div>'+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#fbbf24':'#d97706')+'">'+D2.hold+'</div><div class="lb">هولد ('+D2.holdPct+'%)</div></div>'+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#a78bfa':'#7c3aed')+'">'+D2.govCount+'</div><div class="lb">محافظات</div></div>'+
     (D2.govs.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+';font-size:15px">'+D2.govs[0].n+'</div><div class="lb">الأكثر تسجيلات ('+D2.govs[0].t+')</div></div>':'')+
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#22d3ee':'#0891b2')+'">'+D2.accPct+'%</div><div class="lb">نسبة القبول</div></div>'+
-    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.none||'0')+'</div><div class="lb">بدون تقييم</div></div>'
-}
-
-function renderInsights(D2){
-  return '<h3>📊 أهم الاستنتاجات</h3><div class="ins-grid">'+
-    genInsights(D2).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>'
-}
-function renderRegInsights(D2){
-  return '<h3>📊 حالة التسجيلات</h3><div class="ins-grid">'+
-    genRegInsights(D2).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>'
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.none||'0')+'</div><div class="lb">بدون تقييم</div></div></div>'
 }
 
 function r(i){curTab=i;
   if(i===4){
     var rows=filterRegRows();
     D=computeReg(rows);
-    document.getElementById('exec').innerHTML=renderExecReg(D);
-    document.getElementById('insights').innerHTML=renderRegInsights(D);
+    document.getElementById('execArea').innerHTML=renderExecReg(D);
+    document.getElementById('insights').innerHTML='<h3>📊 حالة التسجيلات</h3><div class="ins-grid">'+
+      genRegInsights(D).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>';
     document.getElementById('x').innerHTML=tab4(D);
     setTimeout(draw4,50,D)
   }else{
+    RD=computeReg(filterRegRows());
     var rows=filterRows();
     D=compute(rows);
-    document.getElementById('exec').innerHTML=renderExec(D);
-    document.getElementById('insights').innerHTML=renderInsights(D);
+    var aIns=genInsights(D),rIns=genRegInsights(RD);
+    var allIns=aIns.concat(rIns);
+    document.getElementById('execArea').innerHTML=renderExec(D)+(i===0?renderExecReg(RD):'');
+    document.getElementById('insights').innerHTML='<h3>📊 أهم الاستنتاجات</h3><div class="ins-grid">'+
+      allIns.map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>';
     document.getElementById('x').innerHTML=[tab0,tab1,tab2,tab3][i](D);
     setTimeout([draw0,draw1,draw2,draw3][i],50,D)
   }
 }
 
-// ===== TAB 0-3 (Activations) =====
+// ===== TAB 0 (Overview) =====
 function tab0(D2){
   return '<div class="grid">'+
-    '<div class="card fu"><h3>الساعات اليومية</h3><div class="cw-lg"><canvas id="o_line"></canvas></div></div>'+
-    '<div class="card"><h3>توزيع ساعات المتطوعين</h3><div class="cw"><canvas id="o_hdist"></canvas></div></div>'+
-    '<div class="card fu"><h3>الأنشطة الرئيسية</h3><div class="cw-lg"><canvas id="o_acts"></canvas></div></div>'+
-    '<div class="card"><h3>المراكز الأكثر نشاطاً</h3><div class="cw-lg"><canvas id="o_cents"></canvas></div></div>'+
-    '<div class="card"><h3>أماكن التنفيذ</h3><div class="cw"><canvas id="o_locs"></canvas></div></div>'+
-    '<div class="card"><h3>أونلاين vs حضوري</h3><div class="cw"><canvas id="o_oloff"></canvas></div></div>'+
-    '<div class="card fu"><h3>تفاصيل الأنشطة</h3><div class="tw" style="max-height:380px">'+tblDet(D2.dets,D2.hours)+'</div></div></div>'
+    '<div class="card fu"><h3>الساعات اليومية <span class="bdg">'+fmt(D2.hours)+' س</span>'+eBtn('o_line')+'</h3><div class="cw-lg"><canvas id="o_line"></canvas></div></div>'+
+    '<div class="card"><h3>توزيع ساعات المتطوعين'+eBtn('o_hdist')+'</h3><div class="cw"><canvas id="o_hdist"></canvas></div></div>'+
+    '<div class="card fu"><h3>الأنشطة الرئيسية'+eBtn('o_acts')+'</h3><div class="cw-lg"><canvas id="o_acts"></canvas></div></div>'+
+    '<div class="card"><h3>المراكز الأكثر نشاطاً'+eBtn('o_cents')+'</h3><div class="cw-lg"><canvas id="o_cents"></canvas></div></div>'+
+    '<div class="card"><h3>أماكن التنفيذ'+eBtn('o_locs')+'</h3><div class="cw"><canvas id="o_locs"></canvas></div></div>'+
+    '<div class="card"><h3>أونلاين vs حضوري'+eBtn('o_oloff')+'</h3><div class="cw"><canvas id="o_oloff"></canvas></div></div>'+
+    '<div class="card fu"><h3>تفاصيل الأنشطة <span class="bdg">'+D2.dets.length+'</span></h3><div class="tw" style="max-height:380px">'+tblDet(D2.dets,D2.hours)+'</div></div>'+
+    '<div class="card fu"><h3>توزيع حالة التسجيلات'+eBtn('r_donut')+'</h3><div class="cw-lg"><canvas id="r_donut"></canvas></div></div>'+
+    '<div class="card fu"><h3>التسجيلات حسب المحافظة'+eBtn('r_gov')+'</h3><div class="cw-lg"><canvas id="r_gov"></canvas></div></div>'+
+    '<div class="card fu"><h3>تفاصيل التسجيلات حسب المحافظة <span class="bdg">'+RD.govCount+' محافظة</span></h3><div class="tw" style="max-height:380px">'+tblReg(RD.govs)+'</div></div>'+
+    '<div class="card fu"><h3>مؤشرات التفعيلات</h3><div class="mi">'+
+      '<div class="mi-it" style="border-color:#2563eb"><div class="mv" style="color:#2563eb">'+D2.vols+'</div><div class="ml">المتطوعون</div></div>'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.entries+'</div><div class="ml">التفعيلات</div></div>'+
+      '<div class="mi-it" style="border-color:#d97706"><div class="mv" style="color:#d97706">'+fmt(D2.hours)+'</div><div class="ml">الساعات</div></div>'+
+      '<div class="mi-it" style="border-color:#7c3aed"><div class="mv" style="color:#7c3aed">'+D2.satAvg.toFixed(2)+'</div><div class="ml">الرضا /5</div></div>'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.goalPct+'%</div><div class="ml">تحقيق المستهدف</div></div>'+
+      '<div class="mi-it" style="border-color:#dc2626"><div class="mv" style="color:#dc2626">'+(D2.prob.y||'0')+'</div><div class="ml">مشكلات</div></div></div></div>'+
+    '<div class="card fu"><h3>مؤشرات التسجيلات</h3><div class="mi">'+
+      '<div class="mi-it" style="border-color:#2563eb"><div class="mv" style="color:#2563eb">'+RD.total+'</div><div class="ml">إجمالي التسجيلات</div></div>'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+RD.acc+'</div><div class="ml">مقبول</div></div>'+
+      '<div class="mi-it" style="border-color:#dc2626"><div class="mv" style="color:#dc2626">'+RD.rej+'</div><div class="ml">مرفوض</div></div>'+
+      '<div class="mi-it" style="border-color:#d97706"><div class="mv" style="color:#d97706">'+RD.hold+'</div><div class="ml">هولد</div></div>'+
+      '<div class="mi-it" style="border-color:#64748b"><div class="mv" style="color:#64748b">'+RD.none+'</div><div class="ml">بدون تقييم</div></div>'+
+      '<div class="mi-it" style="border-color:#0891b2"><div class="mv" style="color:#0891b2">'+RD.govCount+'</div><div class="ml">محافظات</div></div></div></div></div>'
 }
 function draw0(D2){
   line('o_line',D2.dailys);
@@ -635,16 +666,21 @@ function draw0(D2){
   hbar('o_acts',D2.acts.map(function(x){return x.n}),D2.acts.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#f59e0b','#d97706','#059669','#34d399','#7c3aed','#0ea5e9','#14b8a6','#dc2626','#ef4444','#f97316']);
   hbar('o_cents',D2.cents.map(function(x){return x.n+' ('+x.v+' متطوع)'}),D2.cents.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff']);
   hbar('o_locs',D2.locs.map(function(x){return x.n}),D2.locs.map(function(x){return x.h}),['#2563eb','#059669','#f59e0b','#dc2626','#0ea5e9']);
-  vbar('o_oloff',['أونلاين','حضوري'],[D2.online.h,D2.offline.h],['#0ea5e9','#059669'])
+  vbar('o_oloff',['أونلاين','حضوري'],[D2.online.h,D2.offline.h],['#0ea5e9','#059669']);
+  var sts=[{n:'مقبول',c:RD.acc},{n:'مرفوض',c:RD.rej},{n:'هولد',c:RD.hold},{n:'بدون تقييم',c:RD.none}].filter(function(x){return x.c>0});
+  donut('r_donut',sts.map(function(x){return x.n}),sts.map(function(x){return x.c}),['#059669','#ef4444','#f59e0b','#94a3b8']);
+  hbar('r_gov',RD.govs.map(function(x){return x.n+' ('+x.t+')'}),RD.govs.map(function(x){return x.t}),['#2563eb','#059669','#d97706','#7c3aed','#0891b2','#dc2626','#f59e0b','#14b8a6','#f97316'])
 }
+
+// ===== TAB 1 (Volunteers) =====
 function tab1(D2){
   return '<div class="grid">'+
     '<div class="card fu"><h3>ترتيب المتطوعين <span class="bdg">'+D2.tops.length+' متطوع</span></h3><div class="tw" style="max-height:460px">'+tblVols(D2.tops)+'</div></div>'+
-    '<div class="card"><h3>حسب الساعات</h3><div class="cw"><canvas id="v_hb"></canvas></div></div>'+
-    '<div class="card"><h3>حسب التفعيلات</h3><div class="cw"><canvas id="v_eb"></canvas></div></div>'+
-    '<div class="card"><h3>المتطوعون</h3><div class="cw"><canvas id="v_vc"></canvas></div></div>'+
-    '<div class="card"><h3>التفعيلات</h3><div class="cw"><canvas id="v_ec"></canvas></div></div>'+
-    '<div class="card"><h3>الساعات</h3><div class="cw"><canvas id="v_hc"></canvas></div></div></div>'
+    '<div class="card"><h3>حسب الساعات'+eBtn('v_hb')+'</h3><div class="cw"><canvas id="v_hb"></canvas></div></div>'+
+    '<div class="card"><h3>حسب التفعيلات'+eBtn('v_eb')+'</h3><div class="cw"><canvas id="v_eb"></canvas></div></div>'+
+    '<div class="card"><h3>المتطوعون'+eBtn('v_vc')+'</h3><div class="cw"><canvas id="v_vc"></canvas></div></div>'+
+    '<div class="card"><h3>التفعيلات'+eBtn('v_ec')+'</h3><div class="cw"><canvas id="v_ec"></canvas></div></div>'+
+    '<div class="card"><h3>الساعات'+eBtn('v_hc')+'</h3><div class="cw"><canvas id="v_hc"></canvas></div></div></div>'
 }
 function draw1(D2){
   var rs=[[0,5,'<5'],[5,10,'5-10'],[10,20,'10-20'],[20,30,'20-30'],[30,50,'30-50'],[50,999,'50+']];
@@ -655,13 +691,15 @@ function draw1(D2){
   vbar('v_ec',['أونلاين','حضوري'],[D2.online.e,D2.offline.e],['#0ea5e9','#059669']);
   vbar('v_hc',['أونلاين','حضوري'],[D2.online.h,D2.offline.h],['#0ea5e9','#059669'])
 }
+
+// ===== TAB 2 (Activities) =====
 function tab2(D2){
   return '<div class="grid">'+
-    '<div class="card fu"><h3>الساعات حسب النشاط</h3><div class="cw-lg"><canvas id="a_acts"></canvas></div></div>'+
-    '<div class="card"><h3>التفعيلات حسب النشاط</h3><div class="cw"><canvas id="a_acte"></canvas></div></div>'+
-    '<div class="card fu"><h3>الساعات حسب المركز</h3><div class="cw-lg"><canvas id="a_cents"></canvas></div></div>'+
-    '<div class="card"><h3>الساعات حسب المكان</h3><div class="cw"><canvas id="a_locs"></canvas></div></div>'+
-    '<div class="card fu"><h3>الساعات حسب التفاصيل</h3><div class="cw-lg"><canvas id="a_dets"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات حسب النشاط'+eBtn('a_acts')+'</h3><div class="cw-lg"><canvas id="a_acts"></canvas></div></div>'+
+    '<div class="card"><h3>التفعيلات حسب النشاط'+eBtn('a_acte')+'</h3><div class="cw"><canvas id="a_acte"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات حسب المركز'+eBtn('a_cents')+'</h3><div class="cw-lg"><canvas id="a_cents"></canvas></div></div>'+
+    '<div class="card"><h3>الساعات حسب المكان'+eBtn('a_locs')+'</h3><div class="cw"><canvas id="a_locs"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات حسب التفاصيل'+eBtn('a_dets')+'</h3><div class="cw-lg"><canvas id="a_dets"></canvas></div></div>'+
     '<div class="card fu"><h3>المشاريع والجهات <span class="bdg">'+D2.projs.length+'</span></h3><div class="tw" style="max-height:380px">'+tblProj(D2.projs,D2.hours)+'</div></div></div>'
 }
 function draw2(D2){
@@ -672,14 +710,16 @@ function draw2(D2){
   hbar('a_locs',D2.locs.slice().reverse().map(function(x){return x.n}),D2.locs.slice().reverse().map(function(x){return x.h}),['#2563eb','#059669','#f59e0b','#dc2626','#0ea5e9']);
   hbar('a_dets',D2.dets.slice().reverse().map(function(x){return x.n}),D2.dets.slice().reverse().map(function(x){return x.h}),p)
 }
+
+// ===== TAB 3 (Evaluation) =====
 function tab3(D2){
   return '<div class="grid">'+
-    '<div class="card"><h3>الرضا عن اليوم <span class="bdg" style="background:#059669">'+D2.sats[0].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s1"></canvas></div></div>'+
-    '<div class="card"><h3>ملائمة المهمة <span class="bdg" style="background:#059669">'+D2.sats[1].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s2"></canvas></div></div>'+
-    '<div class="card"><h3>الشعور بالأمان <span class="bdg" style="background:#059669">'+D2.sats[2].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s3"></canvas></div></div>'+
-    '<div class="card"><h3>مقارنة المتوسطات</h3><div class="cw"><canvas id="e_s4"></canvas></div></div>'+
-    '<div class="card"><h3>تحقيق المستهدف <span class="bdg" style="background:'+(D2.goalPct>80?'#059669':'#d97706')+'">'+D2.goalPct+'%</span></h3><div class="cw"><canvas id="e_s5"></canvas></div></div>'+
-    '<div class="card"><h3>المشكلات خلال اليوم <span class="bdg" style="background:'+(D2.probPct<10?'#059669':'#dc2626')+'">'+D2.probPct+'%</span></h3><div class="cw"><canvas id="e_s6"></canvas></div></div>'+
+    '<div class="card"><h3>الرضا عن اليوم <span class="bdg" style="background:#059669">'+D2.sats[0].m.toFixed(2)+'/5</span>'+eBtn('e_s1')+'</h3><div class="cw"><canvas id="e_s1"></canvas></div></div>'+
+    '<div class="card"><h3>ملائمة المهمة <span class="bdg" style="background:#059669">'+D2.sats[1].m.toFixed(2)+'/5</span>'+eBtn('e_s2')+'</h3><div class="cw"><canvas id="e_s2"></canvas></div></div>'+
+    '<div class="card"><h3>الشعور بالأمان <span class="bdg" style="background:#059669">'+D2.sats[2].m.toFixed(2)+'/5</span>'+eBtn('e_s3')+'</h3><div class="cw"><canvas id="e_s3"></canvas></div></div>'+
+    '<div class="card"><h3>مقارنة المتوسطات'+eBtn('e_s4')+'</h3><div class="cw"><canvas id="e_s4"></canvas></div></div>'+
+    '<div class="card"><h3>تحقيق المستهدف <span class="bdg" style="background:'+(D2.goalPct>80?'#059669':'#d97706')+'">'+D2.goalPct+'%</span>'+eBtn('e_s5')+'</h3><div class="cw"><canvas id="e_s5"></canvas></div></div>'+
+    '<div class="card"><h3>المشكلات خلال اليوم <span class="bdg" style="background:'+(D2.probPct<10?'#059669':'#dc2626')+'">'+D2.probPct+'%</span>'+eBtn('e_s6')+'</h3><div class="cw"><canvas id="e_s6"></canvas></div></div>'+
     '<div class="card fu"><h3>توزيع التقييمات</h3><div class="tw">'+tblSats(D2)+'</div></div>'+
     '<div class="card fu"><h3>مؤشرات سريعة</h3><div class="mi">'+
       '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.goal.y+'</div><div class="ml">حققوا المستهدف</div></div>'+
@@ -702,8 +742,8 @@ function draw3(D2){
 function tab4(D2){
   return '<div class="grid">'+
     '<div class="card fu"><h3>تفاصيل التسجيلات حسب المحافظة <span class="bdg">'+D2.govCount+' محافظة</span></h3><div class="tw" style="max-height:380px">'+tblReg(D2.govs)+'</div></div>'+
-    '<div class="card fu"><h3>توزيع حالة التسجيلات</h3><div class="cw-lg"><canvas id="r_donut"></canvas></div></div>'+
-    '<div class="card fu"><h3>التسجيلات حسب المحافظة</h3><div class="cw-lg"><canvas id="r_gov"></canvas></div></div>'+
+    '<div class="card fu"><h3>توزيع حالة التسجيلات'+eBtn('r4_donut')+'</h3><div class="cw-lg"><canvas id="r4_donut"></canvas></div></div>'+
+    '<div class="card fu"><h3>التسجيلات حسب المحافظة'+eBtn('r4_gov')+'</h3><div class="cw-lg"><canvas id="r4_gov"></canvas></div></div>'+
     '<div class="card fu"><h3>جميع التسجيلات <span class="bdg">'+D2.total+'</span></h3><div class="tw" style="max-height:420px">'+tblRegDet(filterRegRows())+'</div></div>'+
     '<div class="card fu"><h3>مؤشرات سريعة</h3><div class="mi">'+
       '<div class="mi-it" style="border-color:#2563eb"><div class="mv" style="color:#2563eb">'+D2.total+'</div><div class="ml">إجمالي التسجيلات</div></div>'+
@@ -715,15 +755,21 @@ function tab4(D2){
 }
 function draw4(D2){
   var sts=[{n:'مقبول',c:D2.acc},{n:'مرفوض',c:D2.rej},{n:'هولد',c:D2.hold},{n:'بدون تقييم',c:D2.none}].filter(function(x){return x.c>0});
-  donut('r_donut',sts.map(function(x){return x.n}),sts.map(function(x){return x.c}),['#059669','#ef4444','#f59e0b','#94a3b8']);
-  hbar('r_gov',D2.govs.map(function(x){return x.n+' ('+x.t+')'}),D2.govs.map(function(x){return x.t}),['#2563eb','#059669','#d97706','#7c3aed','#0891b2','#dc2626','#f59e0b','#14b8a6','#f97316']);
+  donut('r4_donut',sts.map(function(x){return x.n}),sts.map(function(x){return x.c}),['#059669','#ef4444','#f59e0b','#94a3b8']);
+  hbar('r4_gov',D2.govs.map(function(x){return x.n+' ('+x.t+')'}),D2.govs.map(function(x){return x.t}),['#2563eb','#059669','#d97706','#7c3aed','#0891b2','#dc2626','#f59e0b','#14b8a6','#f97316'])
 }
 
 // ===== REFRESH =====
 document.getElementById('rfBtn').onclick=function(){
-  document.head.removeChild(document.querySelector('script[src*="callback=handleData"]'));
+  var els=document.querySelectorAll('script[src*="callback=handleData"]');
+  if(els.length)els[0].remove();
   loadData()
 };
+
+// ===== KEYFRAMES =====
+var st=document.createElement('style');
+st.textContent='@keyframes sp{to{transform:rotate(360deg)}}';
+document.head.appendChild(st);
 
 // ===== INIT =====
 loadData();
