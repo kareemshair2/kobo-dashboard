@@ -200,8 +200,6 @@ function loadData(){
   s.src=API_URL+'?callback=handleData&action=all&_t='+Date.now();
   document.head.appendChild(s);
 }
-@keyframes sp{to{transform:rotate(360deg)}}
-
 function handleData(resp){
   RAW=resp.activations||[];
   REG_DATA=resp.registrations||[];
