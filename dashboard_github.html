@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>كوبو - التفعيلات والتسجيلات</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",system-ui,sans-serif;background:#f1f5f9;color:#0f172a;padding:16px;font-size:14px;line-height:1.5}
+.dark{background:#0b1120;color:#e2e8f0}
+.cnt{max-width:1400px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,#0a1628,#132347,#1e3a8a);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 4px 24px rgba(10,22,40,.35)}
+.hdr h1{font-size:18px;font-weight:800}
+.hdr h1 sm{font-size:11px;font-weight:400;opacity:.6}
+.hdr-l{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:11px;transition:.2s;display:flex;align-items:center;gap:4px;user-select:none}
+.tb:hover{background:rgba(255,255,255,.2)}
+.tb-pr{background:#2563eb;border-color:#2563eb}
+.sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.mt{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.mtl{flex:1;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;color:#64748b;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:.2s;user-select:none;white-space:nowrap;border:2px solid transparent}
+.dark .mtl{background:#0f1a2e;color:#94a3b8}
+.mtl.a{border-color:#1e3a8a;color:#1e3a8a;background:#eff6ff}
+.dark .mtl.a{border-color:#60a5fa;color:#60a5fa;background:rgba(96,165,250,.1)}
+.mtl:not(.a):hover{background:#f8fafc}
+.card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dark .card{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.ct{font-size:14px;font-weight:700;color:#1e3a8a}
+.dark .ct{color:#60a5fa}
+.grd{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px}
+.bx{background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-top:3px solid #1e3a8a}
+.dark .bx{background:rgba(30,41,59,.5)}
+.bx .nv{font-size:24px;font-weight:800;color:#1e3a8a;line-height:1.2}
+.dark .bx .nv{color:#60a5fa}
+.bx .lb{font-size:10px;color:#64748b;margin-top:2px}
+.dark .bx .lb{color:#94a3b8}
+.gr2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.tw{overflow-x:auto;border-radius:8px;max-height:400px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:#1e3a8a;color:#fff;padding:7px 8px;text-align:center;font-weight:600;white-space:nowrap;font-size:10px;position:sticky;top:0;z-index:2}
+.dark th{background:#2563eb}
+td{padding:6px 8px;text-align:center;border-bottom:1px solid #e2e8f0;font-size:11px}
+.dark td{border-color:#1e293b}
+tr:hover td{background:rgba(30,58,138,.04)}
+.dark tr:hover td{background:rgba(96,165,250,.06)}
+.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.ba{background:#e6f4ea;color:#1e7e34}
+.br{background:#fce8e6;color:#c5221f}
+.bh{background:#fef7e0;color:#e37400}
+.bn{background:#f1f3f4;color:#5f6368}
+.flt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.flt select{padding:6px 10px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;font-size:12px;flex:1;min-width:110px;font-family:inherit}
+.dark .flt select{background:#1e293b;color:#e2e8f0;border-color:#334155}
+.tot{font-weight:700;background:#e8f0fe!important}
+.dark .tot{background:rgba(96,165,250,.15)!important}
+.err{background:#fef2f2;color:#dc2626;padding:16px;border-radius:10px;text-align:center;font-size:14px;margin-bottom:12px}
+.dark .err{background:rgba(220,38,38,.1);color:#fca5a5}
+.ft{text-align:center;padding:16px 14px 4px;color:#64748b;font-size:11px;margin-top:20px}
+.dark .ft{color:#94a3b8}
+@media(max-width:768px){body{padding:8px}.grd{grid-template-columns:repeat(2,1fr)}.gr2{grid-template-columns:1fr}.flt select{min-width:80px;font-size:10px}.bx .nv{font-size:20px}.mtl{font-size:11px;padding:8px 12px}}
+</style>
+</head>
+<body>
+<div class="cnt">
+<div class="hdr">
+<div><h1>كوبو - التفعيلات والتسجيلات <sm id="hdrSub">...</sm></h1></div>
+<div class="hdr-l">
+<button class="tb" id="dmBtn">🌙 ليلي</button>
+<button class="tb tb-pr" id="refBtn" onclick="refreshAll()"><span id="refIcon">🔄</span><span id="refTxt">تحديث</span></button>
+</div>
+</div>
+
+<div class="mt" id="mt">
+<div class="mtl a" data-tab="reg">📋 حالة التسجيلات <span class="bdg ba" id="regBadge">0</span></div>
+<div class="mtl" data-tab="men">📊 المنوفيه <span class="bdg ba" id="menBadge">0</span></div>
+</div>
+
+<div id="mainContent">
+<div class="card" style="text-align:center;padding:40px;color:#94a3b8">
+  <div style="font-size:40px;margin-bottom:12px">⏳</div>
+  <div>جاري تحميل البيانات...</div>
+</div>
+</div>
+<div class="ft">إدارة البيانات والتحول الرقمي &copy; 2026</div>
+</div>
+
+<script>
+// =============================================
+// ★ غيّر ده لينك Web App بتاعك اللي نشرته ★
+// =============================================
+var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwBU25oSbMVh63iGu8PPDMPWKr_8BYzQxF4VPI8OnChCvAo5BuCSK-0QB-j6ZiVbS9cLw/exec';
+
+// =============================================
+var allData = {registrations:[], activations:[]};
+var currentTab = 'reg';
+
+// Dark mode
+(function(){
+  var d = localStorage.getItem('dark');
+  if(d === '1') { document.body.classList.add('dark'); document.getElementById('dmBtn').textContent = '☀️ نهاري'; }
+  document.getElementById('dmBtn').onclick = function(){
+    document.body.classList.toggle('dark');
+    var isDark = document.body.classList.contains('dark');
+    this.textContent = isDark ? '☀️ نهاري' : '🌙 ليلي';
+    localStorage.setItem('dark', isDark ? '1' : '0');
+  };
+})();
+
+// Tab switching
+document.getElementById('mt').onclick = function(e){
+  var t = e.target.closest('.mtl');
+  if(!t) return;
+  document.querySelectorAll('.mtl').forEach(function(x){ x.classList.remove('a'); });
+  t.classList.add('a');
+  currentTab = t.dataset.tab;
+  renderTab();
+};
+
+// Refresh using JSONP
+function refreshAll(){
+  var btn = document.getElementById('refBtn');
+  var icon = document.getElementById('refIcon');
+  var txt = document.getElementById('refTxt');
+  btn.disabled = true;
+  icon.innerHTML = '<span class="sp"></span>';
+  txt.textContent = 'جاري...';
+
+  var cbName = 'koboData_' + Date.now();
+  window[cbName] = function(data){
+    allData = data;
+    updateBadges();
+    renderTab();
+    btn.disabled = false;
+    icon.innerHTML = '🔄';
+    txt.textContent = 'تحديث';
+    delete window[cbName];
+  };
+
+  var script = document.createElement('script');
+  script.src = WEBAPP_URL + '?action=all&callback=' + cbName;
+  script.onerror = function(){
+    document.getElementById('mainContent').innerHTML = '<div class="err">❌ خطأ في الاتصال بالخادم. تأكد من رابط Web App</div>';
+    btn.disabled = false;
+    icon.innerHTML = '🔄';
+    txt.textContent = 'تحديث';
+    delete window[cbName];
+  };
+  document.body.appendChild(script);
+}
+
+function updateBadges(){
+  document.getElementById('regBadge').textContent = allData.registrations ? allData.registrations.length : '0';
+  document.getElementById('menBadge').textContent = allData.activations ? allData.activations.length : '0';
+}
+
+function renderTab(){
+  if(currentTab === 'reg') renderReg();
+  else renderMen();
+}
+
+// =========== REGISTRATION TAB ===========
+function renderReg(){
+  var d = allData.registrations || [];
+  document.getElementById('hdrSub').textContent = 'التسجيلات';
+  var total = d.length;
+  var approved = d.filter(function(r){ return r.status === 'مقبول'; }).length;
+  var rejected = d.filter(function(r){ return r.status === 'مرفوض'; }).length;
+  var hold = d.filter(function(r){ return r.status === 'هولد'; }).length;
+  var none = d.filter(function(r){ return r.status === 'بدون تقييم'; }).length;
+
+  var html = '<div class="grd">' +
+    '<div class="bx"><div class="nv" style="color:#2563eb">' + total + '</div><div class="lb">إجمالي التسجيلات</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#059669">' + approved + '</div><div class="lb">مقبول</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#dc2626">' + rejected + '</div><div class="lb">مرفوض</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#e37400">' + hold + '</div><div class="lb">هولد</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#64748b">' + none + '</div><div class="lb">بدون تقييم</div></div>' +
+    '</div>';
+
+  html += '<div class="card"><div class="ch"><div class="ct">ملخص المحافظات</div></div>' +
+    '<div class="tw"><table><thead><tr><th>المحافظة</th><th>المجموع</th><th>مقبول</th><th>مرفوض</th><th>هولد</th><th>بدون تقييم</th></tr></thead><tbody>';
+
+  var govs = ['الجيزه','اسيوط','المنوفيه','مطروح','شمال سيناء'];
+  var statuses = ['مقبول','مرفوض','هولد','بدون تقييم'];
+  var gt = 0, gc = [0,0,0,0];
+  for(var i = 0; i < govs.length; i++){
+    var rows = d.filter(function(r){ return r.gov === govs[i]; });
+    var t = rows.length; gt += t;
+    var cnts = statuses.map(function(s){ return rows.filter(function(r){ return r.status === s; }).length; });
+    for(var j = 0; j < 4; j++) gc[j] += cnts[j];
+    html += '<tr><td><b>' + govs[i] + '</b></td><td><b>' + t + '</b></td>';
+    html += cnts.map(function(c){ return '<td>' + c + '</td>'; }).join('');
+    html += '</tr>';
+  }
+  html += '<tr class="tot"><td><b>المجموع</b></td><td><b>' + gt + '</b></td>';
+  html += gc.map(function(c){ return '<td><b>' + c + '</b></td>'; }).join('');
+  html += '</tr></tbody></table></div></div>';
+
+  html += '<div class="card"><div class="ch"><div class="ct">جميع التسجيلات</div></div>' +
+    '<div class="flt">' +
+    '<select id="fGovReg" onchange="detReg()">' +
+    '<option value="all">كل المحافظات</option>' +
+    '<option value="الجيزه">الجيزه</option>' +
+    '<option value="اسيوط">اسيوط</option>' +
+    '<option value="المنوفيه">المنوفيه</option>' +
+    '<option value="مطروح">مطروح</option>' +
+    '<option value="شمال سيناء">شمال سيناء</option>' +
+    '</select>' +
+    '<select id="fStatReg" onchange="detReg()">' +
+    '<option value="all">كل الحالات</option>' +
+    '<option value="مقبول">مقبول</option>' +
+    '<option value="مرفوض">مرفوض</option>' +
+    '<option value="هولد">هولد</option>' +
+    '<option value="بدون تقييم">بدون تقييم</option>' +
+    '</select>' +
+    '<span id="rcntReg" style="align-self:center;font-size:12px;color:#64748b"></span>' +
+    '</div>' +
+    '<div class="tw"><table><thead><tr><th>#</th><th>المتطوع</th><th>المحافظة</th><th>التاريخ</th><th>النشاط</th><th>المشروع</th><th>الحالة</th></tr></thead><tbody id="regDetBody"></tbody></table></div></div>';
+
+  document.getElementById('mainContent').innerHTML = html;
+  detReg();
+}
+
+function detReg(){
+  var d = allData.registrations || [];
+  var fg = document.getElementById('fGovReg').value;
+  var fs = document.getElementById('fStatReg').value;
+  var fil = d;
+  if(fg !== 'all') fil = fil.filter(function(r){ return r.gov === fg; });
+  if(fs !== 'all') fil = fil.filter(function(r){ return r.status === fs; });
+  var tb = document.getElementById('regDetBody');
+  if(!tb) return;
+  if(!fil.length){
+    tb.innerHTML = '<tr><td colspan="7" style="padding:30px;color:#999">لا توجد بيانات</td></tr>';
+    document.getElementById('rcntReg').textContent = '0';
+    return;
+  }
+  document.getElementById('rcntReg').textContent = fil.length + ' سجل';
+  tb.innerHTML = fil.slice(0,2000).map(function(r, i){
+    var bc = r.status === 'مقبول' ? 'ba' : r.status === 'مرفوض' ? 'br' : r.status === 'هولد' ? 'bh' : 'bn';
+    return '<tr><td>' + (i+1) + '</td><td>' + r.name + '</td><td>' + r.gov + '</td><td>' + r.date + '</td><td>' + r.mgt + '</td><td>' + r.proj + '</td><td><span class="bdg ' + bc + '">' + r.status + '</span></td></tr>';
+  }).join('');
+}
+
+// =========== MENOUFIA TAB ===========
+function renderMen(){
+  var rows = allData.activations || [];
+  document.getElementById('hdrSub').textContent = 'المنوفيه - التفعيلات';
+  if(!rows.length){
+    document.getElementById('mainContent').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#94a3b8">لا توجد بيانات تفعيلات</div>';
+    return;
+  }
+
+  var vols = {}, hours = 0, days = {};
+  rows.forEach(function(r){
+    var h = +r.h || 0; hours += h;
+    if(!vols[r.v]) vols[r.v] = 0; vols[r.v] += h;
+    days[r.d] = 1;
+  });
+  var volCount = Object.keys(vols).length;
+  var dayCount = Object.keys(days).length;
+  var online = rows.filter(function(r){ return r.l === 'Online'; }).length;
+  var offline = rows.filter(function(r){ return r.l !== 'Online'; }).length;
+
+  var html = '<div class="grd">' +
+    '<div class="bx"><div class="nv" style="color:#2563eb">' + volCount + '</div><div class="lb">المتطوعون</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#059669">' + rows.length + '</div><div class="lb">التفعيلات</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#d97706">' + hours.toFixed(1) + '</div><div class="lb">الساعات</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#7c3aed">' + dayCount + '</div><div class="lb">أيام</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#0891b2">' + online + '</div><div class="lb">أونلاين</div></div>' +
+    '<div class="bx"><div class="nv" style="color:#059669">' + offline + '</div><div class="lb">حضوري</div></div>' +
+    '</div>';
+
+  var acts = {}, dets = {}, locs = {};
+  rows.forEach(function(r){
+    var h = +r.h || 0;
+    if(!acts[r.sa]) acts[r.sa] = {e:0, h:0};
+    acts[r.sa].e++; acts[r.sa].h += h;
+    if(!dets[r.ad]) dets[r.ad] = {e:0, h:0};
+    dets[r.ad].e++; dets[r.ad].h += h;
+    if(!locs[r.l]) locs[r.l] = {e:0, h:0};
+    locs[r.l].e++; locs[r.l].h += h;
+  });
+
+  function toArr(dic){
+    var a = [];
+    for(var k in dic) a.push({n:k, e:dic[k].e, h:Math.round(dic[k].h*10)/10});
+    a.sort(function(a,b){ return b.h - a.h; });
+    return a;
+  }
+
+  function tbl(arr){
+    var h = '<table><tr><th>#</th><th>البند</th><th>عدد</th><th>ساعات</th></tr>';
+    arr.forEach(function(x,i){
+      h += '<tr' + (i%2 ? ' style="background:rgba(30,58,138,.015)"' : '') + '><td>' + (i+1) + '</td><td style="text-align:right">' + x.n + '</td><td>' + x.e + '</td><td><b>' + x.h + '</b></td></tr>';
+    });
+    return h + '</table>';
+  }
+
+  html += '<div class="gr2">' +
+    '<div class="card"><div class="ch"><div class="ct">الأنشطة الرئيسية</div></div><div class="tw">' + tbl(toArr(acts)) + '</div></div>' +
+    '<div class="card"><div class="ch"><div class="ct">تفاصيل الأنشطة</div></div><div class="tw">' + tbl(toArr(dets)) + '</div></div>' +
+    '<div class="card"><div class="ch"><div class="ct">أماكن التنفيذ</div></div><div class="tw">' + tbl(toArr(locs)) + '</div></div>' +
+    '<div class="card"><div class="ch"><div class="ct">الساعات اليومية</div></div>' +
+    '<div class="flt"><select id="menChartType" onchange="drawMenChart()"><option value="hours">ساعات</option><option value="count">تفعيلات</option></select><span id="menChartRcnt" style="font-size:12px;color:#64748b"></span></div>' +
+    '<canvas id="menChart" style="width:100%;height:240px"></canvas></div>' +
+    '</div>';
+
+  var topArr = [];
+  for(var k in vols) topArr.push({n:k, h:Math.round(vols[k]*10)/10});
+  topArr.sort(function(a,b){ return b.h - a.h; });
+  html += '<div class="card"><div class="ch"><div class="ct">أكثر المتطوعين ساعات</div></div><div class="tw" style="max-height:300px">' +
+    '<table><tr><th>#</th><th>المتطوع</th><th>الساعات</th><th>النسبة</th></tr>';
+  topArr.slice(0, 100).forEach(function(x,i){
+    html += '<tr' + (i%2 ? ' style="background:rgba(30,58,138,.015)"' : '') + '><td>' + (i+1) + '</td><td style="text-align:right">' + x.n + '</td><td><b>' + x.h + '</b></td><td>' + (hours ? Math.round(x.h/hours*100) + '%' : '') + '</td></tr>';
+  });
+  html += '</table></div></div>';
+
+  document.getElementById('mainContent').innerHTML = html;
+  drawMenChart();
+}
+
+function drawMenChart(){
+  var rows = allData.activations || [];
+  var type = document.getElementById('menChartType') ? document.getElementById('menChartType').value : 'hours';
+  var daily = {};
+  rows.forEach(function(r){
+    if(!daily[r.d]) daily[r.d] = {h:0, c:0};
+    daily[r.d].h += +r.h || 0;
+    daily[r.d].c++;
+  });
+  var days = Object.keys(daily).filter(function(k){ return k && k.length === 10; }).sort();
+  var rcnt = document.getElementById('menChartRcnt');
+  if(rcnt) rcnt.textContent = days.length + ' يوم';
+  var canvas = document.getElementById('menChart');
+  if(!canvas || !days.length) return;
+  var H = 240;
+  var W = canvas.parentElement.clientWidth || 600;
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+  var vals = days.map(function(d){ return type === 'hours' ? Math.round(daily[d].h*10)/10 : daily[d].c; });
+  var mx = Math.max.apply(null, vals) || 1;
+  var pt = 20, pb = 30, pl = 6, pr = 6;
+  var gap = Math.max(1, W * 0.005);
+  var bw = Math.max(3, (W - pl - pr - gap * (days.length + 1)) / days.length);
+  for(var i = 0; i < days.length; i++){
+    var x = pl + gap + i * (bw + gap);
+    var bh = Math.max(2, (vals[i] / mx) * (H - pt - pb));
+    var y2 = H - pb - bh;
+    ctx.fillStyle = i % 2 === 0 ? '#1e3a8a' : '#60a5fa';
+    ctx.beginPath(); ctx.rect(x, y2, bw, bh); ctx.fill();
+    ctx.fillStyle = '#0f172a';
+    ctx.font = 'bold 9px Arial';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText(vals[i], x + bw/2, Math.max(y2 - 2, 12));
+    if(i % 3 === 0 || i === days.length - 1){
+      ctx.fillStyle = '#64748b';
+      ctx.font = '7px Arial';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillText(days[i].slice(5), x + bw/2, H - pb + 4);
+    }
+  }
+}
+
+// Load on start
+refreshAll();
+</script>
+</body>
+</html>
