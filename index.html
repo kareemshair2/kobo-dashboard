@@ -123,6 +123,16 @@ tr:hover td{background:rgba(30,58,138,.04)}
 .mi-it .ml{font-size:10px;color:#64748b}
 .dark .mi-it .ml{color:#94a3b8}
 
+.st{background:#fff;border-radius:10px;padding:8px 14px;margin-bottom:10px;display:none;align-items:center;gap:8px;font-size:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);border-inline-start:4px solid #2563eb}
+.dark .st{background:#0f1a2e;color:#e2e8f0}
+.st-sp{width:12px;height:12px;border:2px solid #e2e8f0;border-top-color:#2563eb;border-radius:50%;animation:stsp .5s linear infinite;display:inline-block}
+@keyframes stsp{to{transform:rotate(360deg)}}
+.st-ok{color:#059669;font-size:16px;font-weight:700}
+.st-er{color:#dc2626;font-size:16px;font-weight:700}
+.st-msg{flex:1}
+.st-close{background:transparent;border:none;color:#64748b;cursor:pointer;font-size:16px;padding:0 4px}
+.st-close:hover{color:#dc2626}
+
 .ft{text-align:center;padding:16px 14px 4px;color:#64748b;font-size:11px;border-top:1px solid #e2e8f0;margin-top:auto}
 .dark .ft{color:#94a3b8;border-color:#1e293b}
 .ft .nm{font-size:15px;font-weight:700;color:#1e3a8a;margin-bottom:1px}
@@ -151,6 +161,8 @@ tr:hover td{background:rgba(30,58,138,.04)}
 
 <div class="fltrs" id="fltrs"></div>
 
+<div class="st" id="stBar"><span class="st-sp" id="stIcon"></span><span class="st-msg" id="stMsg">جاري الاتصال بالخادم...</span><button class="st-close" onclick="document.getElementById('stBar').style.display='none'">✕</button></div>
+
 <div id="execArea"></div>
 
 <div class="insights" id="insights"></div>
@@ -169,7 +181,7 @@ tr:hover td{background:rgba(30,58,138,.04)}
 </div>
 
 <script>
-var API_URL = 'https://script.google.com/macros/s/AKfycbwBU25oSbMVh63iGu8PPDMPWKr_8BYzQxF4VPI8OnChCvAo5BuCSK-0QB-j6ZiVbS9cLw/exec';
+var API_URL = 'https://script.google.com/macros/s/AKfycbx9rqFN89qoxu7p7NBZN-ohlogdi8RicKYCIdU_2U1cdVOWPYGZ5Px3kaq6fpH0eAIB/exec';
 var RAW = [], REG_DATA = [], FO = {}, REG_FO = {}, D = {}, RD = {}, curTab = 0;
 
 // ===== DARK MODE =====
@@ -193,14 +205,46 @@ function pC(){return isDark()?'#60a5fa':'#1e3a8a'}
 function fmt(v){return v===Math.floor(v)?v:Math.round(v*100)/100}
 function pct(v,t){return t?Math.round(v/t*1000)/10:0}
 
+// ===== STATUS BAR =====
+var stTimeout = null;
+
+function showStatus(type, msg){
+  var bar=document.getElementById('stBar');
+  var icon=document.getElementById('stIcon');
+  var msgEl=document.getElementById('stMsg');
+  if(!bar||!icon||!msgEl)return;
+  if(stTimeout){clearTimeout(stTimeout);stTimeout=null}
+  bar.style.display='flex';
+  msgEl.textContent=msg;
+  icon.className='';
+  if(type==='load'){icon.innerHTML='';icon.className='st-sp';bar.style.borderColor='#2563eb'}
+  else if(type==='ok'){icon.innerHTML='✓';icon.className='st-ok';bar.style.borderColor='#059669';stTimeout=setTimeout(function(){bar.style.display='none'},4000)}
+  else if(type==='err'){icon.innerHTML='✕';icon.className='st-er';bar.style.borderColor='#dc2626'}
+  else if(type==='info'){icon.innerHTML='ℹ';icon.className='';bar.style.borderColor='#7c3aed'}
+}
+
 // ===== DATA LOADING =====
+var loadTimeout = null;
+
 function loadData(){
+  showStatus('load','جاري الاتصال بالخادم...');
   document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div style="display:inline-block;width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#1e3a8a;border-radius:50%;animation:sp .6s linear infinite"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>';
   var s=document.createElement('script');
   s.src=API_URL+'?callback=handleData&action=all&_t='+Date.now();
   document.head.appendChild(s);
+  if(loadTimeout)clearTimeout(loadTimeout);
+  loadTimeout=setTimeout(function(){
+    showStatus('err','⚠️ لم يتم تحميل البيانات بعد. تأكد من تفعيل Web App في Google Apps Script');
+    document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:14px;color:#64748b">المشكلة: الخادم لم يستجب بعد<br>الحل: افتح الرابط التالي أولاً في متصفحك وسَمح بالأذونات، ثم ارجع للداشبورد:<br><a href="'+API_URL+'" target="_blank" style="color:#2563eb;font-size:13px">افتح Web App للتجربة</a><br><br><button class="tb" style="background:#1e3a8a;color:#fff;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;margin-top:8px" onclick="loadData()">🔄 إعادة المحاولة</button></div></div>'
+  },20000)
 }
 function handleData(resp){
+  if(loadTimeout){clearTimeout(loadTimeout);loadTimeout=null}
+  if(resp.error){
+    showStatus('err','❌ خطأ في الخادم: '+resp.error);
+    return
+  }
+  showStatus('load','جاري معالجة البيانات...');
   RAW=resp.activations||[];
   REG_DATA=resp.registrations||[];
   FO=computeFO(RAW);
@@ -213,6 +257,7 @@ function handleData(resp){
     t.classList.add('a');r(+t.dataset.i)
   };
   r(0);
+  showStatus('ok','✓ تم تحميل البيانات بنجاح - '+(RAW.length+REG_DATA.length)+' سجل');
   window.addEventListener('resize',function(){
     clearTimeout(window._rt);
     window._rt=setTimeout(function(){
@@ -759,15 +804,11 @@ function draw4(D2){
 
 // ===== REFRESH =====
 document.getElementById('rfBtn').onclick=function(){
+  showStatus('info','🔄 جاري تحديث البيانات...');
   var els=document.querySelectorAll('script[src*="callback=handleData"]');
   if(els.length)els[0].remove();
   loadData()
 };
-
-// ===== KEYFRAMES =====
-var st=document.createElement('style');
-st.textContent='@keyframes sp{to{transform:rotate(360deg)}}';
-document.head.appendChild(st);
 
 // ===== INIT =====
 loadData();
