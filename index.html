@@ -2,370 +2,731 @@
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>كوبو - التفعيلات والتسجيلات</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>داشبورد التفعيلات والتسجيلات التنفيذي</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:"Segoe UI",system-ui,sans-serif;background:#f1f5f9;color:#0f172a;padding:16px;font-size:14px;line-height:1.5}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:#f1f5f9;color:#0f172a;padding:20px;min-height:100vh;
+  display:flex;flex-direction:column;transition:.25s;font-size:14px;line-height:1.5
+}
 .dark{background:#0b1120;color:#e2e8f0}
-.cnt{max-width:1400px;margin:0 auto}
-.hdr{background:linear-gradient(135deg,#0a1628,#132347,#1e3a8a);color:#fff;border-radius:14px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;box-shadow:0 4px 24px rgba(10,22,40,.35)}
-.hdr h1{font-size:18px;font-weight:800}
-.hdr h1 sm{font-size:11px;font-weight:400;opacity:.6}
-.hdr-l{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.tb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;padding:5px 14px;border-radius:20px;cursor:pointer;font-size:11px;transition:.2s;display:flex;align-items:center;gap:4px;user-select:none}
+.container{max-width:1400px;margin:0 auto;width:100%;flex:1;display:flex;flex-direction:column}
+.hdr{
+  background:linear-gradient(135deg,#0a1628,#132347,#1e3a8a);color:#fff;
+  border-radius:14px;padding:18px 24px;margin-bottom:14px;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+  box-shadow:0 4px 24px rgba(10,22,40,.35)
+}
+.hdr h1{font-size:20px;font-weight:800}
+.hdr h1 small{font-size:11px;font-weight:400;opacity:.6;margin-inline-start:8px}
+.hdr-lft{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hdr .dr{font-size:11px;opacity:.6}
+.tb{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;
+    padding:5px 16px;border-radius:20px;cursor:pointer;font-size:11px;transition:.2s;
+    display:flex;align-items:center;gap:5px;user-select:none}
 .tb:hover{background:rgba(255,255,255,.2)}
-.tb-pr{background:#2563eb;border-color:#2563eb}
-.sp{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.mt{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.mtl{flex:1;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;border-radius:10px;cursor:pointer;color:#64748b;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:.2s;user-select:none;white-space:nowrap;border:2px solid transparent}
-.dark .mtl{background:#0f1a2e;color:#94a3b8}
-.mtl.a{border-color:#1e3a8a;color:#1e3a8a;background:#eff6ff}
-.dark .mtl.a{border-color:#60a5fa;color:#60a5fa;background:rgba(96,165,250,.1)}
-.mtl:not(.a):hover{background:#f8fafc}
-.card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+
+.fltrs{
+  background:#fff;border-radius:12px;padding:10px 14px;margin-bottom:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  display:flex;flex-wrap:wrap;align-items:center;gap:6px
+}
+.dark .fltrs{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.fltrs label{font-size:10px;font-weight:600;color:#64748b}
+.dark .fltrs label{color:#94a3b8}
+.fltrs select,.fltrs input{
+  font-size:11px;padding:3px 6px;border-radius:5px;border:1px solid #e2e8f0;
+  background:#fff;color:#0f172a;font-family:inherit;max-width:120px
+}
+.dark .fltrs select,.dark .fltrs input{background:#1e293b;color:#e2e8f0;border-color:#334155}
+.fltrs .fbtn{background:#1e3a8a;color:#fff;border:none;padding:4px 12px;border-radius:5px;cursor:pointer;font-size:11px;font-weight:600}
+.fltrs .fbtn:hover{background:#2563eb}
+.fltrs .fbtn2{background:transparent;color:#64748b;border:1px solid #e2e8f0;padding:4px 10px;border-radius:5px;cursor:pointer;font-size:11px}
+.dark .fltrs .fbtn2{color:#94a3b8;border-color:#334155}
+.fltrs .fbtn2:hover{background:#f1f5f9}
+.dark .fltrs .fbtn2:hover{background:#1e293b}
+
+.exec{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:12px}
+.ec{background:#fff;border-radius:10px;padding:10px 12px;box-shadow:0 1px 3px rgba(0,0,0,.06);text-align:center;border-top:3px solid #1e3a8a;transition:.15s}
+.dark .ec{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.ec .nv{font-size:20px;font-weight:800;line-height:1.2}
+.ec .lb{font-size:9px;color:#64748b;margin-top:1px}
+.dark .ec .lb{color:#94a3b8}
+.ec:nth-child(1){border-color:#2563eb}.ec:nth-child(1) .nv{color:#2563eb}
+.ec:nth-child(2){border-color:#059669}.ec:nth-child(2) .nv{color:#059669}
+.ec:nth-child(3){border-color:#d97706}.ec:nth-child(3) .nv{color:#d97706}
+.ec:nth-child(4){border-color:#7c3aed}.ec:nth-child(4) .nv{color:#7c3aed}
+.dark .ec:nth-child(1) .nv{color:#60a5fa}.dark .ec:nth-child(2) .nv{color:#34d399}
+.dark .ec:nth-child(3) .nv{color:#fbbf24}.dark .ec:nth-child(4) .nv{color:#a78bfa}
+.ec:nth-child(n+5){border-color:#0891b2}.ec:nth-child(n+5) .nv{color:#0891b2}
+.dark .ec:nth-child(n+5) .nv{color:#22d3ee}
+
+.insights{
+  background:#fff;border-radius:12px;padding:12px 16px;margin-bottom:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);border-inline-start:4px solid #7c3aed
+}
+.dark .insights{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.insights h3{font-size:12px;font-weight:700;color:#7c3aed;margin-bottom:6px}
+.dark .insights h3{color:#a78bfa}
+.ins-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px}
+.ins-item{padding:4px 8px;background:#f8fafc;border-radius:6px;font-size:11px;border-inline-start:3px solid #cbd5e1}
+.dark .ins-item{background:#1e293b;border-color:#334155}
+.ins-item strong{color:#1e3a8a}
+.dark .ins-item strong{color:#60a5fa}
+
+.tabs{display:flex;gap:3px;margin-bottom:12px;background:#fff;border-radius:10px;padding:4px;overflow-x:auto;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dark .tabs{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.tab{flex:1;text-align:center;padding:7px 12px;font-size:12px;font-weight:600;border-radius:7px;cursor:pointer;color:#64748b;white-space:nowrap;transition:.2s;user-select:none}
+.dark .tab{color:#94a3b8}
+.tab.a{background:#1e3a8a;color:#fff;box-shadow:0 2px 10px rgba(30,58,138,.25)}
+.dark .tab.a{background:#2563eb}
+.tab:not(.a):hover{background:rgba(30,58,138,.06)}
+.dark .tab:not(.a):hover{background:rgba(59,130,246,.1)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));gap:12px;margin-bottom:12px;flex:1}
+.fu{grid-column:1/-1}
+
+.card{background:#fff;border-radius:10px;padding:14px 16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .dark .card{background:#0f1a2e;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
-.ct{font-size:14px;font-weight:700;color:#1e3a8a}
-.dark .ct{color:#60a5fa}
-.grd{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px}
-.bx{background:#f8fafc;border-radius:10px;padding:12px;text-align:center;border-top:3px solid #1e3a8a}
-.dark .bx{background:rgba(30,41,59,.5)}
-.bx .nv{font-size:24px;font-weight:800;color:#1e3a8a;line-height:1.2}
-.dark .bx .nv{color:#60a5fa}
-.bx .lb{font-size:10px;color:#64748b;margin-top:2px}
-.dark .bx .lb{color:#94a3b8}
-.gr2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
-.tw{overflow-x:auto;border-radius:8px;max-height:400px;overflow-y:auto}
+.card h3{font-size:13px;font-weight:700;color:#1e3a8a;margin-bottom:6px;padding-bottom:5px;border-bottom:2px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center}
+.dark .card h3{color:#60a5fa;border-color:#1e293b}
+.card h3 .bdg{background:#1e3a8a;color:#fff;font-size:9px;padding:2px 8px;border-radius:8px;font-weight:500}
+.dark .card h3 .bdg{background:#2563eb}
+
+.cw{width:100%;height:300px;position:relative;margin:0}
+.cw-lg{height:420px}
+canvas{width:100%!important;height:100%!important;display:block}
+
+.tw{overflow-x:auto;margin-top:5px;border-radius:8px;max-height:460px;overflow-y:auto}
 table{width:100%;border-collapse:collapse;font-size:11px}
 th{background:#1e3a8a;color:#fff;padding:7px 8px;text-align:center;font-weight:600;white-space:nowrap;font-size:10px;position:sticky;top:0;z-index:2}
-.dark th{background:#2563eb}
+.dark th{background:#1e3a8a}
 td{padding:6px 8px;text-align:center;border-bottom:1px solid #e2e8f0;font-size:11px}
 .dark td{border-color:#1e293b}
 tr:hover td{background:rgba(30,58,138,.04)}
-.dark tr:hover td{background:rgba(96,165,250,.06)}
-.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
-.ba{background:#e6f4ea;color:#1e7e34}
-.br{background:#fce8e6;color:#c5221f}
-.bh{background:#fef7e0;color:#e37400}
-.bn{background:#f1f3f4;color:#5f6368}
-.flt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.flt select{padding:6px 10px;border-radius:8px;border:1px solid #e2e8f0;background:#fff;font-size:12px;flex:1;min-width:110px;font-family:inherit}
-.dark .flt select{background:#1e293b;color:#e2e8f0;border-color:#334155}
-.tot{font-weight:700;background:#e8f0fe!important}
-.dark .tot{background:rgba(96,165,250,.15)!important}
-.err{background:#fef2f2;color:#dc2626;padding:16px;border-radius:10px;text-align:center;font-size:14px;margin-bottom:12px}
-.dark .err{background:rgba(220,38,38,.1);color:#fca5a5}
-.ft{text-align:center;padding:16px 14px 4px;color:#64748b;font-size:11px;margin-top:20px}
-.dark .ft{color:#94a3b8}
-@media(max-width:768px){body{padding:8px}.grd{grid-template-columns:repeat(2,1fr)}.gr2{grid-template-columns:1fr}.flt select{min-width:80px;font-size:10px}.bx .nv{font-size:20px}.mtl{font-size:11px;padding:8px 12px}}
+.dark tr:hover td{background:rgba(59,130,246,.06)}
+.tr-alt td{background:rgba(30,58,138,.015)}
+.dark .tr-alt td{background:rgba(59,130,246,.02)}
+
+.mi{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:5px}
+.mi-it{background:rgba(30,58,138,.03);padding:8px 10px;border-radius:8px;border-inline-start:3px solid #1e3a8a}
+.dark .mi-it{background:rgba(59,130,246,.04)}
+.mi-it .mv{font-size:18px;font-weight:800;line-height:1.3}
+.mi-it .ml{font-size:10px;color:#64748b}
+.dark .mi-it .ml{color:#94a3b8}
+
+.ft{text-align:center;padding:16px 14px 4px;color:#64748b;font-size:11px;border-top:1px solid #e2e8f0;margin-top:auto}
+.dark .ft{color:#94a3b8;border-color:#1e293b}
+.ft .nm{font-size:15px;font-weight:700;color:#1e3a8a;margin-bottom:1px}
+.dark .ft .nm{color:#60a5fa}
+
+.bdg2{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600}
+.bdg-g{background:#e6f4ea;color:#1e7e34}.dark .bdg-g{background:rgba(30,126,52,.2);color:#34d399}
+.bdg-r{background:#fce8e6;color:#c5221f}.dark .bdg-r{background:rgba(197,34,31,.2);color:#f87171}
+.bdg-y{background:#fef7e0;color:#e37400}.dark .bdg-y{background:rgba(227,116,0,.2);color:#fbbf24}
+.bdg-gy{background:#f1f3f4;color:#5f6368}.dark .bdg-gy{background:rgba(95,99,104,.3);color:#94a3b8}
+
+@media(max-width:768px){
+  body{padding:8px}.grid{grid-template-columns:1fr}.exec{grid-template-columns:repeat(2,1fr)}
+  .fltrs{gap:4px}.fltrs select,.fltrs input{max-width:100%;font-size:10px}
+  .hdr h1{font-size:15px}.ec .nv{font-size:16px}.ins-grid{grid-template-columns:1fr}
+  .cw{height:240px}.cw-lg{height:340px}
+}
 </style>
 </head>
 <body>
-<div class="cnt">
+<div class="container">
+
 <div class="hdr">
-<div><h1>كوبو - التفعيلات والتسجيلات <sm id="hdrSub">...</sm></h1></div>
-<div class="hdr-l">
-<button class="tb" id="dmBtn">🌙 ليلي</button>
-<button class="tb tb-pr" id="refBtn" onclick="refreshAll()"><span id="refIcon">🔄</span><span id="refTxt">تحديث</span></button>
-</div>
-</div>
-
-<div class="mt" id="mt">
-<div class="mtl a" data-tab="reg">📋 حالة التسجيلات <span class="bdg ba" id="regBadge">0</span></div>
-<div class="mtl" data-tab="men">📊 المنوفيه <span class="bdg ba" id="menBadge">0</span></div>
+  <h1>داشبورد التفعيلات والتسجيلات <small>المنوفية — الجيزة — أسيوط — مطروح — شمال سيناء</small></h1>
+  <div class="hdr-lft">
+    <span class="dr" id="dr"></span>
+    <button class="tb" id="dmBtn">🌙 ليلي</button>
+    <button class="tb" id="rfBtn">🔄 تحديث</button>
+  </div>
 </div>
 
-<div id="mainContent">
-<div class="card" style="text-align:center;padding:40px;color:#94a3b8">
-  <div style="font-size:40px;margin-bottom:12px">⏳</div>
-  <div>جاري تحميل البيانات...</div>
+<div class="fltrs" id="fltrs"></div>
+
+<div class="exec" id="exec"></div>
+
+<div class="insights" id="insights"></div>
+
+<div class="tabs" id="ts">
+  <div class="tab a" data-i="0">📊 نظرة عامة</div>
+  <div class="tab" data-i="1">👥 المتطوعون</div>
+  <div class="tab" data-i="2">📋 الأنشطة</div>
+  <div class="tab" data-i="3">⭐ التقييم</div>
+  <div class="tab" data-i="4">📋 حالة التسجيلات</div>
 </div>
-</div>
-<div class="ft">إدارة البيانات والتحول الرقمي &copy; 2026</div>
+
+<div id="x"></div>
+
+<div class="ft"><div class="nm">كريم شعير</div>إدارة البيانات والتحول الرقمي &copy; 2026</div>
 </div>
 
 <script>
-// =============================================
-// ★ غيّر ده لينك Web App بتاعك اللي نشرته ★
-// =============================================
-var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwBU25oSbMVh63iGu8PPDMPWKr_8BYzQxF4VPI8OnChCvAo5BuCSK-0QB-j6ZiVbS9cLw/exec';
+var API_URL = 'https://script.google.com/macros/s/AKfycbwBU25oSbMVh63iGu8PPDMPWKr_8BYzQxF4VPI8OnChCvAo5BuCSK-0QB-j6ZiVbS9cLw/exec';
+var RAW = [], REG_DATA = [], FO = {}, REG_FO = {}, D = {}, curTab = 0;
 
-// =============================================
-var allData = {registrations:[], activations:[]};
-var currentTab = 'reg';
-
-// Dark mode
+// ===== DARK MODE =====
 (function(){
-  var d = localStorage.getItem('dark');
-  if(d === '1') { document.body.classList.add('dark'); document.getElementById('dmBtn').textContent = '☀️ نهاري'; }
-  document.getElementById('dmBtn').onclick = function(){
+  var d=localStorage.getItem('dark');
+  if(d==='1'){document.body.classList.add('dark');document.getElementById('dmBtn').textContent='☀️ نهاري'}
+  document.getElementById('dmBtn').onclick=function(){
     document.body.classList.toggle('dark');
-    var isDark = document.body.classList.contains('dark');
-    this.textContent = isDark ? '☀️ نهاري' : '🌙 ليلي';
-    localStorage.setItem('dark', isDark ? '1' : '0');
-  };
+    var isDark=document.body.classList.contains('dark');
+    this.textContent=isDark?'☀️ نهاري':'🌙 ليلي';
+    localStorage.setItem('dark',isDark?'1':'0');
+    if(typeof curTab!=='undefined')r(curTab)
+  }
 })();
 
-// Tab switching
-document.getElementById('mt').onclick = function(e){
-  var t = e.target.closest('.mtl');
-  if(!t) return;
-  document.querySelectorAll('.mtl').forEach(function(x){ x.classList.remove('a'); });
-  t.classList.add('a');
-  currentTab = t.dataset.tab;
-  renderTab();
+function isDark(){return document.body.classList.contains('dark')}
+function txC(){return isDark()?'#e2e8f0':'#0f172a'}
+function t2C(){return isDark()?'#94a3b8':'#64748b'}
+function boC(){return isDark()?'#1e293b':'#e2e8f0'}
+function pC(){return isDark()?'#60a5fa':'#1e3a8a'}
+function fmt(v){return v===Math.floor(v)?v:Math.round(v*100)/100}
+function pct(v,t){return t?Math.round(v/t*1000)/10:0}
+
+// ===== DATA LOADING =====
+function loadData(){
+  document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div class="sp"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>';
+  var s=document.createElement('script');
+  s.src=API_URL+'?callback=handleData&action=all&_t='+Date.now();
+  document.head.appendChild(s);
+}
+function handleData(resp){
+  RAW=resp.activations||[];
+  REG_DATA=resp.registrations||[];
+  FO=computeFO(RAW);
+  REG_FO=computeRegFO(REG_DATA);
+  document.getElementById('dr').textContent=FO.minDate+' → '+FO.maxDate;
+  buildFilters();
+  document.getElementById('ts').onclick=function(e){
+    var t=e.target.closest('.tab');if(!t)return;
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('a')});
+    t.classList.add('a');r(+t.dataset.i)
+  };
+  r(0);
+  window.addEventListener('resize',function(){
+    clearTimeout(window._rt);
+    window._rt=setTimeout(function(){
+      var tabs=document.querySelectorAll('.tab');
+      for(var i=0;i<tabs.length;i++)if(tabs[i].classList.contains('a')){[draw0,draw1,draw2,draw3,draw4][i](D);break}
+    },300)
+  });
+}
+
+function computeFO(data){
+  var cents={},pros={},acts={},locs={};
+  data.forEach(function(r){
+    if(r.c)cents[r.c]=1;
+    if(r.p)pros[r.p]=1;
+    if(r.sa)acts[r.sa]=1;
+    if(r.l)locs[r.l]=1
+  });
+  var dates=data.filter(function(r){return r.d}).map(function(r){return r.d}).sort();
+  return {
+    centers:Object.keys(cents).sort(),
+    projects:Object.keys(pros).sort(),
+    activities:Object.keys(acts).sort(),
+    locations:Object.keys(locs).sort(),
+    minDate:dates[0]||'',maxDate:dates[dates.length-1]||''
+  }
+}
+
+function computeRegFO(data){
+  var govs={},sts={};
+  data.forEach(function(r){
+    govs[r.gov]=1;sts[r.status]=1
+  });
+  var dates=data.filter(function(r){return r.date}).map(function(r){return r.date}).sort();
+  return {
+    governorates:Object.keys(govs).sort(),
+    statuses:Object.keys(sts).sort(),
+    minDate:dates[0]||'',maxDate:dates[dates.length-1]||''
+  }
+}
+
+// ===== FILTERS =====
+var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode:'', gov:'', status:''};
+
+function buildFilters(){
+  var opts=function(arr){return arr.map(function(v){return '<option>'+v+'</option>'}).join('')};
+  var up=function(id,v){F[id]=v||''};
+  var h='<label>من:</label><input type="date" id="fDf" value="'+FO.minDate+'" style="max-width:110px">';
+  h+='<label>إلى:</label><input type="date" id="fDt" value="'+FO.maxDate+'" style="max-width:110px">';
+  h+='<label>المحافظة:</label><select id="fG"><option value="">الكل</option>'+opts(REG_FO.governorates)+'</select>';
+  h+='<label>المركز:</label><select id="fC"><option value="">الكل</option>'+opts(FO.centers)+'</select>';
+  h+='<label>المشروع:</label><select id="fP"><option value="">الكل</option>'+opts(FO.projects)+'</select>';
+  h+='<label>النشاط:</label><select id="fA"><option value="">الكل</option>'+opts(FO.activities)+'</select>';
+  h+='<label>المكان:</label><select id="fL"><option value="">الكل</option>'+opts(FO.locations)+'</select>';
+  h+='<label>النوع:</label><select id="fM"><option value="">الكل</option><option value="Online">أونلاين</option><option value="Offline">حضوري</option></select>';
+  h+='<button class="fbtn" onclick="applyF()">تطبيق</button>';
+  h+='<button class="fbtn2" onclick="resetF()">إعادة تعيين</button>';
+  document.getElementById('fltrs').innerHTML=h
+}
+
+function readF(){
+  F.dFrom=document.getElementById('fDf').value;
+  F.dTo=document.getElementById('fDt').value;
+  F.gov=document.getElementById('fG').value;
+  F.center=document.getElementById('fC').value;
+  F.project=document.getElementById('fP').value;
+  F.activity=document.getElementById('fA').value;
+  F.location=document.getElementById('fL').value;
+  F.mode=document.getElementById('fM').value
+}
+function applyF(){readF();r(curTab)}
+function resetF(){
+  document.getElementById('fDf').value=FO.minDate;
+  document.getElementById('fDt').value=FO.maxDate;
+  document.getElementById('fG').value='';
+  document.getElementById('fC').value='';
+  document.getElementById('fP').value='';
+  document.getElementById('fA').value='';
+  document.getElementById('fL').value='';
+  document.getElementById('fM').value='';
+  applyF()
+}
+
+function filterRows(){
+  return RAW.filter(function(r){
+    if(F.dFrom && r.d < F.dFrom) return false;
+    if(F.dTo && r.d > F.dTo) return false;
+    if(F.center && r.c !== F.center) return false;
+    if(F.project && r.p !== F.project) return false;
+    if(F.activity && r.sa !== F.activity) return false;
+    if(F.location && r.l !== F.location) return false;
+    if(F.mode && (F.mode==='Online' ? r.l!=='Online' : r.l==='Online')) return false;
+    return true
+  })
+}
+
+function filterRegRows(){
+  return REG_DATA.filter(function(r){
+    if(F.gov && r.gov !== F.gov) return false;
+    return true
+  })
+}
+
+// ===== COMPUTE =====
+function compute(rows){
+  var out={};
+  var vols={},hours=0,days={};
+  var acts={},dets={},locs={},cents={},pros={},hrs={};
+  var s1={0:0,1:0,2:0,3:0,4:0,5:0},s2={0:0,1:0,2:0,3:0,4:0,5:0},s3={0:0,1:0,2:0,3:0,4:0,5:0};
+  var goalY=0,goalN=0,probN=0,probY=0,s1S=0,s2S=0,s3S=0,s1C=0,s2C=0,s3C=0;
+  rows.forEach(function(r){
+    var h=+r.h||0;hours+=h;
+    if(!vols[r.v])vols[r.v]=0;vols[r.v]+=h;
+    days[r.d]=1;
+    acts[r.sa]=(acts[r.sa]||{e:0,h:0});acts[r.sa].e++;acts[r.sa].h+=h;
+    dets[r.ad]=(dets[r.ad]||{e:0,h:0});dets[r.ad].e++;dets[r.ad].h+=h;
+    locs[r.l]=(locs[r.l]||{e:0,h:0});locs[r.l].e++;locs[r.l].h+=h;
+    if(r.c){cents[r.c]=(cents[r.c]||{e:0,h:0,v:{}});cents[r.c].e++;cents[r.c].h+=h;cents[r.c].v[r.v]=1}
+    pros[r.p]=(pros[r.p]||{e:0,h:0});pros[r.p].e++;pros[r.p].h+=h;
+    var hb=h<3?'0-3':h<5?'3-5':h<7?'5-7':h<9?'7-9':h<12?'9-12':h<16?'12-16':'16-24';
+    hrs[hb]=(hrs[hb]||0)+1;
+    var s1v=+r.s1||0,s2v=+r.s2||0,s3v=+r.s3||0;
+    if(s1v>=1&&s1v<=5){s1[s1v]++;s1S+=s1v;s1C++}
+    if(s2v>=1&&s2v<=5){s2[s2v]++;s2S+=s2v;s2C++}
+    if(s3v>=1&&s3v<=5){s3[s3v]++;s3S+=s3v;s3C++}
+    if(r.g==='نعم')goalY++;else if(r.g==='لا')goalN++;
+    if(r.pb==='لا')probN++;else if(r.pb==='نعم')probY++
+  });
+  var volList=Object.keys(vols);
+  out.vols=volList.length;out.entries=rows.length;
+  out.hours=Math.round(hours*10)/10;
+  out.avgH=volList.length?Math.round(hours/volList.length*10)/10:0;
+  out.days=Object.keys(days).length;
+  var on=rows.filter(function(r){return r.l==='Online'});
+  var off=rows.filter(function(r){return r.l!=='Online'});
+  var onV={};on.forEach(function(r){onV[r.v]=1});
+  var offV={};off.forEach(function(r){offV[r.v]=1});
+  out.online={e:on.length,h:Math.round(on.reduce(function(s,r){return s+(+r.h||0)},0)*10)/10,v:Object.keys(onV).length};
+  out.offline={e:off.length,h:Math.round(off.reduce(function(s,r){return s+(+r.h||0)},0)*10)/10,v:Object.keys(offV).length};
+  var toArr=function(dict,keyH){
+    var arr=[];for(var k in dict)arr.push({n:k,e:dict[k].e,h:Math.round(dict[k].h*10)/10,v:dict[k].v?Object.keys(dict[k].v).length:0});
+    arr.sort(function(a,b){return b.h-a.h});return arr
+  };
+  out.acts=toArr(acts);out.dets=toArr(dets);out.locs=toArr(locs);
+  out.cents=toArr(cents);out.projs=toArr(pros);
+  var volArr=[];for(var k in vols)volArr.push({n:k,h:Math.round(vols[k]*10)/10,e:Math.round(vols[k])});
+  volArr.sort(function(a,b){return b.h-a.h});
+  out.tops=volArr;
+  var dailyMap={};rows.forEach(function(r){
+    if(!dailyMap[r.d])dailyMap[r.d]={h:0,e:0};
+    dailyMap[r.d].h+=(+r.h||0);dailyMap[r.d].e++
+  });
+  out.dailys=Object.keys(dailyMap).filter(function(k){return k.length===10}).sort().map(function(k){
+    return {d:k,h:Math.round(dailyMap[k].h*10)/10,e:dailyMap[k].e}
+  });
+  var hdOrder=['0-3','3-5','5-7','7-9','9-12','12-16','16-24'];
+  out.hd=hdOrder.map(function(l){return {l:l,c:hrs[l]||0}});
+  out.sats=[
+    {n:'الرضا عن اليوم',m:s1C?Math.round(s1S/s1C*100)/100:0,d:[s1[1],s1[2],s1[3],s1[4],s1[5]]},
+    {n:'ملائمة المهمة',m:s2C?Math.round(s2S/s2C*100)/100:0,d:[s2[1],s2[2],s2[3],s2[4],s2[5]]},
+    {n:'الشعور بالأمان',m:s3C?Math.round(s3S/s3C*100)/100:0,d:[s3[1],s3[2],s3[3],s3[4],s3[5]]}
+  ];
+  out.satAvg=Math.round((out.sats[0].m+out.sats[1].m+out.sats[2].m)/3*100)/100;
+  out.goal={y:goalY,n:goalN};
+  out.goalPct=goalY+goalN?Math.round(goalY/(goalY+goalN)*1000)/10:0;
+  out.prob={n:probN,y:probY};
+  out.probPct=probY+probN?Math.round(probY/(probY+probN)*1000)/10:0;
+  return out
+}
+
+function computeReg(rows){
+  var out={};
+  var total=rows.length,acc=0,rej=0,hold=0,none=0;
+  var govs={},sts={};
+  rows.forEach(function(r){
+    if(r.status==='مقبول')acc++;
+    else if(r.status==='مرفوض')rej++;
+    else if(r.status==='هولد')hold++;
+    else none++;
+    if(r.gov){if(!govs[r.gov])govs[r.gov]={t:0,acc:0,rej:0,hold:0,none:0};govs[r.gov].t++;govs[r.gov][r.status==='مقبول'?'acc':r.status==='مرفوض'?'rej':r.status==='هولد'?'hold':'none']++}
+    sts[r.status]=(sts[r.status]||0)+1
+  });
+  out.total=total;out.acc=acc;out.rej=rej;out.hold=hold;out.none=none;
+  out.accPct=total?Math.round(acc/total*1000)/10:0;
+  out.rejPct=total?Math.round(rej/total*1000)/10:0;
+  out.holdPct=total?Math.round(hold/total*1000)/10:0;
+  out.govs=Object.keys(govs).map(function(k){
+    return {n:k,t:govs[k].t,acc:govs[k].acc,rej:govs[k].rej,hold:govs[k].hold,none:govs[k].none,
+      accPct:govs[k].t?Math.round(govs[k].acc/govs[k].t*1000)/10:0}
+  }).sort(function(a,b){return b.t-a.t});
+  out.sts=Object.keys(sts).sort().map(function(k){return {n:k,c:sts[k]}});
+  out.govCount=Object.keys(govs).length;
+  return out
+}
+
+// ===== CHARTS =====
+function hbar(id, la, va, co){
+  var c=document.getElementById(id);if(!c)return;
+  var H=c.height=c.parentElement.clientHeight||300;
+  var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
+  var ctx=c.getContext('2d'),pl=160,pr=60,pt=8,pb=8,n=la.length;
+  if(!n)return;var mx=Math.max.apply(null,va)||1,ttl=va.reduce(function(a,b){return a+b},0);
+  var gap=Math.max(2,Math.min(4,H*0.02)),bh=Math.max(6,(H-pt-pb-gap*(n+1))/n);
+  ctx.clearRect(0,0,W,H);
+  for(var i=0;i<n;i++){
+    var y=pt+gap+i*(bh+gap),bw=Math.max(3,(va[i]/mx)*(W-pl-pr));
+    ctx.fillStyle=co[i%co.length];ctx.beginPath();
+    if(ctx.roundRect)ctx.roundRect(pl,y,bw,bh,2);else ctx.rect(pl,y,bw,bh);ctx.fill();
+    ctx.fillStyle=txC();ctx.font='bold 11px Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(fmt(va[i])+' ('+pct(va[i],ttl)+'%)',pl+bw+4,y+bh/2);
+    ctx.fillStyle=t2C();ctx.font='11px Arial';ctx.textAlign='left';ctx.textBaseline='middle';
+    ctx.fillText(la[i],pl,y+bh/2)
+  }
+}
+function vbar(id,la,va,co){
+  var c=document.getElementById(id);if(!c)return;
+  var H=c.height=c.parentElement.clientHeight||300;
+  var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
+  var ctx=c.getContext('2d'),pt=22,pb=35,pl=6,pr=6;
+  var mx=Math.max.apply(null,va)||1,n=la.length;if(!n)return;
+  var gap=Math.max(3,W*0.03),bw=Math.max(8,(W-pl-pr-gap*(n+1))/n);
+  ctx.clearRect(0,0,W,H);
+  for(var i=0;i<n;i++){
+    var x=pl+gap+i*(bw+gap),bh=Math.max(2,(va[i]/mx)*(H-pt-pb)),y2=H-pb-bh;
+    ctx.fillStyle=co[i%co.length];ctx.beginPath();
+    if(ctx.roundRect&&bw>5)ctx.roundRect(x,y2,bw,bh,2);else ctx.rect(x,y2,bw,bh);ctx.fill();
+    ctx.fillStyle=txC();ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText(fmt(va[i]),x+bw/2,Math.max(y2-2,10));
+    ctx.fillStyle=t2C();ctx.font='9px Arial';ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.fillText(la[i],x+bw/2,H-pb+2)
+  }
+}
+function line(id, data){
+  var c=document.getElementById(id);if(!c)return;
+  var H=c.height=c.parentElement.clientHeight||420;
+  var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
+  var ctx=c.getContext('2d'),pt=28,pb=38,pl=38,pr=12;
+  var n=data.length;if(!n)return;var maxV=Math.max.apply(null,data.map(function(d){return d.h}))||1;
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle=boC();ctx.lineWidth=.5;
+  for(var g=0;g<=4;g++){var yy=pt+(H-pt-pb)*(1-g/4);
+    ctx.beginPath();ctx.moveTo(pl,yy);ctx.lineTo(W-pr,yy);ctx.stroke();
+    ctx.fillStyle=t2C();ctx.font='8px Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(Math.round(maxV*g/4*10)/10,pl-4,yy)}
+  var step=(W-pl-pr)/(n-1||1);
+  ctx.beginPath();ctx.moveTo(pl,H-pb);
+  for(var i=0;i<n;i++){var x=pl+i*step,y=pt+(H-pt-pb)*(1-data[i].h/maxV);ctx.lineTo(x,y)}
+  ctx.lineTo(pl+(n-1)*step,H-pb);ctx.closePath();ctx.fillStyle='rgba(37,99,235,.1)';ctx.fill();
+  ctx.beginPath();ctx.strokeStyle='#2563eb';ctx.lineWidth=2.5;
+  for(var i=0;i<n;i++){var x=pl+i*step,y=pt+(H-pt-pb)*(1-data[i].h/maxV);
+    if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+  ctx.stroke();
+  var le=Math.max(1,Math.floor(n/12));
+  for(var i=0;i<n;i++){var x=pl+i*step,y=pt+(H-pt-pb)*(1-data[i].h/maxV);
+    ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+    ctx.fillStyle=txC();ctx.font='bold 8px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText(fmt(data[i].h),x,Math.max(y-4,6));
+    if(i%le===0){ctx.fillStyle=t2C();ctx.font='7px Arial';ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.fillText(data[i].d.slice(5),x,H-pb+4)}}
+}
+function donut(id,la,va,co){
+  var c=document.getElementById(id);if(!c)return;
+  var H=c.height=c.parentElement.clientHeight||300;
+  var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
+  var ctx=c.getContext('2d'),cx=W/2,cy=H/2,R=Math.min(W,H)*0.30,r=R*0.48;
+  var ttl=va.reduce(function(a,b){return a+b},0)||1;ctx.clearRect(0,0,W,H);var st=-Math.PI/2;
+  for(var i=0;i<va.length;i++){if(va[i]===0)continue;var a=(va[i]/ttl)*Math.PI*2;
+    ctx.beginPath();ctx.arc(cx,cy,R,st,st+a);ctx.arc(cx,cy,r,st+a,st,1);ctx.closePath();
+    ctx.fillStyle=co[i%co.length];ctx.fill();
+    var ang=st+a/2,px=cx+(R+r)/2*Math.cos(ang),py=cy+(R+r)/2*Math.sin(ang);
+    if(va[i]/ttl>0.05){ctx.fillStyle='#fff';ctx.font='bold 12px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(Math.round(va[i]/ttl*100)+'%',px,py)}
+    st+=a}
+  ctx.fillStyle=txC();ctx.font='bold 20px Arial';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText(ttl,cx,cy-5);ctx.fillStyle=t2C();ctx.font='10px Arial';ctx.fillText('إجمالي',cx,cy+8);
+  var lx=12,ly=H-18-va.length*14;
+  for(var i=0;i<va.length&&i<6;i++){ctx.fillStyle=co[i%co.length];ctx.fillRect(lx,ly+i*14,10,10);
+    ctx.fillStyle=t2C();ctx.font='9px Arial';ctx.textAlign='left';ctx.textBaseline='middle';
+    ctx.fillText(la[i]+' ('+va[i]+')',lx+14,ly+i*14+5)}
+}
+
+// ===== TABLES =====
+function tblVols(arr){
+  var ttl=arr.reduce(function(s,r){return s+r.h},0);
+  var h='<table><tr><th>#</th><th>الاسم</th><th>الساعات</th><th>التفعيلات</th><th>المتوسط</th><th>%</th></tr>';
+  arr.forEach(function(x,i){
+    var hl=i<3?'font-weight:700;color:'+pC():'';
+    h+='<tr'+(i%2?' class="tr-alt"':'')+'><td style="'+hl+'">'+(i+1)+'</td>'+
+      '<td style="text-align:right;'+hl+'">'+x.n+'</td><td><b>'+(i<3?'⭐ ':'')+fmt(x.h)+'</b></td>'+
+      '<td>'+x.e+'</td><td>'+(x.e?fmt(x.h/x.e):'0')+'</td><td>'+pct(x.h,ttl)+'%</td></tr>'
+  });return h+'</table>'
+}
+function tblSats(D2){
+  var h='<table><tr><th>المؤشر</th><th>المتوسط</th><th>5★</th><th>4</th><th>3</th><th>2</th><th>1</th></tr>';
+  D2.sats.forEach(function(x){
+    h+='<tr><td style="text-align:right;font-weight:600">'+x.n+'</td><td><b style="color:'+pC()+'">'+x.m.toFixed(2)+'</b></td>';
+    for(var i=4;i>=0;i--)h+='<td>'+x.d[i]+'</td>';h+='</tr>'
+  });return h+'</table>'
+}
+function tblDet(arr,ttlH){
+  var h='<table><tr><th>#</th><th>تفاصيل النشاط</th><th>تفعيلات</th><th>ساعات</th><th>%</th></tr>';
+  arr.forEach(function(x,i){
+    h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+x.n+'</td><td>'+x.e+'</td><td><b>'+fmt(x.h)+'</b></td><td>'+pct(x.h,ttlH)+'%</td></tr>'
+  });return h+'</table>'
+}
+function tblProj(arr,ttlH){
+  var h='<table><tr><th>#</th><th>المشروع/الجهة</th><th>تفعيلات</th><th>ساعات</th><th>%</th></tr>';
+  arr.forEach(function(x,i){
+    h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+x.n+'</td><td>'+x.e+'</td><td><b>'+fmt(x.h)+'</b></td><td>'+pct(x.h,ttlH)+'%</td></tr>'
+  });return h+'</table>'
+}
+
+function tblReg(arr){
+  var h='<table><tr><th>#</th><th>المحافظة</th><th>إجمالي</th><th>مقبول</th><th>%</th><th>مرفوض</th><th>%</th><th>هولد</th><th>%</th></tr>';
+  arr.forEach(function(x,i){
+    h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right;font-weight:600">'+x.n+'</td><td><b>'+x.t+'</b></td><td style="color:#1e7e34;font-weight:600">'+x.acc+'</td><td>'+x.accPct+'%</td><td style="color:#c5221f;font-weight:600">'+x.rej+'</td><td>'+(x.t?Math.round(x.rej/x.t*1000)/10:'0')+'%</td><td style="color:#e37400;font-weight:600">'+x.hold+'</td><td>'+(x.t?Math.round(x.hold/x.t*1000)/10:'0')+'%</td></tr>'
+  });return h+'</table>'
+}
+
+function tblRegDet(rows){
+  var h='<table><tr><th>#</th><th>الاسم</th><th>المحافظة</th><th>حالة التسجيل</th><th>التاريخ</th></tr>';
+  rows.forEach(function(r,i){
+    var bg=r.status==='مقبول'?'color:#1e7e34;font-weight:600':r.status==='مرفوض'?'color:#c5221f;font-weight:600':r.status==='هولد'?'color:#e37400;font-weight:600':'color:#5f6368';
+    h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+r.name+'</td><td>'+r.gov+'</td><td style="'+bg+'">'+r.status+'</td><td>'+(r.date||'')+'</td></tr>'
+  });return h+'</table>'
+}
+
+// ===== INSIGHTS =====
+function genInsights(D2){
+  var items=[];
+  if(D2.acts.length) items.push('النشاط الأكثر استهلاكاً: <strong>'+D2.acts[0].n+'</strong> ('+fmt(D2.acts[0].h)+' س، '+pct(D2.acts[0].h,D2.hours)+'%)');
+  if(D2.cents.length) items.push('المركز الأكثر نشاطاً: <strong>'+D2.cents[0].n+'</strong> ('+fmt(D2.cents[0].h)+' س، '+D2.cents[0].v+' متطوع)');
+  items.push('نسبة الحضوري: <strong>'+pct(D2.offline.h,D2.hours)+'%</strong> (أونلاين: '+pct(D2.online.h,D2.hours)+'%)');
+  items.push('تحقيق المستهدف: <strong>'+D2.goalPct+'%</strong> ('+D2.goal.y+' من '+(D2.goal.y+D2.goal.n)+' متطوع)');
+  items.push('معدل الرضا العام: <strong>'+D2.satAvg.toFixed(2)+'/5</strong>');
+  if(D2.prob.y) items.push('المشكلات: <strong>'+D2.prob.y+'</strong> ('+pct(D2.prob.y,D2.prob.y+D2.prob.n)+'%)');
+  if(D2.tops.length) items.push('أكثر متطوع: <strong>'+D2.tops[0].n+'</strong> ('+fmt(D2.tops[0].h)+' س)');
+  items.push('إجمالي: <strong>'+D2.entries+'</strong> تفعيلة، <strong>'+fmt(D2.hours)+'</strong> س، <strong>'+D2.vols+'</strong> متطوع');
+  items.push('فترة: <strong>'+D2.dailys.length+'</strong> يوم');
+  return items
+}
+
+function genRegInsights(D2){
+  var items=[];
+  items.push('إجمالي التسجيلات: <strong>'+D2.total+'</strong> متطوع');
+  items.push('نسبة المقبولين: <strong>'+D2.accPct+'%</strong> ('+D2.acc+' متطوع)');
+  items.push('نسبة المرفوضين: <strong>'+D2.rejPct+'%</strong> ('+D2.rej+' متطوع)');
+  items.push('نسبة الهولد: <strong>'+D2.holdPct+'%</strong> ('+D2.hold+' متطوع)');
+  if(D2.govs.length) items.push('أكبر محافظة تسجيلات: <strong>'+D2.govs[0].n+'</strong> ('+D2.govs[0].t+' متطوع)');
+  var best=D2.govs.filter(function(g){return g.t>0}).sort(function(a,b){return b.accPct-a.accPct});
+  if(best.length) items.push('أعلى نسبة قبول: <strong>'+best[0].n+'</strong> ('+best[0].accPct+'%)');
+  items.push('عدد المحافظات: <strong>'+D2.govCount+'</strong> من 5');
+  return items
+}
+
+// ===== RENDER =====
+function renderExec(D2){
+  var k={vols:D2.vols,entries:D2.entries,hours:D2.hours};
+  return '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+k.vols+'</div><div class="lb">المتطوعون</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+k.entries+'</div><div class="lb">التفعيلات</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#fbbf24':'#d97706')+'">'+fmt(k.hours)+'</div><div class="lb">الساعات</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#a78bfa':'#7c3aed')+'">'+D2.goalPct+'%</div><div class="lb">تحقيق المستهدف</div></div>'+
+    (D2.acts.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+';font-size:15px">'+D2.acts[0].n+'</div><div class="lb">أعلى نشاط ('+fmt(D2.acts[0].h)+' س)</div></div>':'')+
+    (D2.cents.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+';font-size:15px">'+D2.cents[0].n+'</div><div class="lb">أعلى مركز ('+fmt(D2.cents[0].h)+' س)</div></div>':'')+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+D2.satAvg.toFixed(2)+'</div><div class="lb">الرضا /5</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.prob.y||'0')+'</div><div class="lb">مشكلات</div></div>'
+}
+
+function renderExecReg(D2){
+  return '<div class="ec"><div class="nv" style="color:'+(isDark()?'#60a5fa':'#2563eb')+'">'+D2.total+'</div><div class="lb">إجمالي التسجيلات</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+'">'+D2.acc+'</div><div class="lb">مقبول ('+D2.accPct+'%)</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+D2.rej+'</div><div class="lb">مرفوض ('+D2.rejPct+'%)</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#fbbf24':'#d97706')+'">'+D2.hold+'</div><div class="lb">هولد ('+D2.holdPct+'%)</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#a78bfa':'#7c3aed')+'">'+D2.govCount+'</div><div class="lb">محافظات</div></div>'+
+    (D2.govs.length?'<div class="ec"><div class="nv" style="color:'+(isDark()?'#34d399':'#059669')+';font-size:15px">'+D2.govs[0].n+'</div><div class="lb">الأكثر تسجيلات ('+D2.govs[0].t+')</div></div>':'')+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#22d3ee':'#0891b2')+'">'+D2.accPct+'%</div><div class="lb">نسبة القبول</div></div>'+
+    '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.none||'0')+'</div><div class="lb">بدون تقييم</div></div>'
+}
+
+function renderInsights(D2){
+  return '<h3>📊 أهم الاستنتاجات</h3><div class="ins-grid">'+
+    genInsights(D2).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>'
+}
+function renderRegInsights(D2){
+  return '<h3>📊 حالة التسجيلات</h3><div class="ins-grid">'+
+    genRegInsights(D2).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>'
+}
+
+function r(i){curTab=i;
+  if(i===4){
+    var rows=filterRegRows();
+    D=computeReg(rows);
+    document.getElementById('exec').innerHTML=renderExecReg(D);
+    document.getElementById('insights').innerHTML=renderRegInsights(D);
+    document.getElementById('x').innerHTML=tab4(D);
+    setTimeout(draw4,50,D)
+  }else{
+    var rows=filterRows();
+    D=compute(rows);
+    document.getElementById('exec').innerHTML=renderExec(D);
+    document.getElementById('insights').innerHTML=renderInsights(D);
+    document.getElementById('x').innerHTML=[tab0,tab1,tab2,tab3][i](D);
+    setTimeout([draw0,draw1,draw2,draw3][i],50,D)
+  }
+}
+
+// ===== TAB 0-3 (Activations) =====
+function tab0(D2){
+  return '<div class="grid">'+
+    '<div class="card fu"><h3>الساعات اليومية</h3><div class="cw-lg"><canvas id="o_line"></canvas></div></div>'+
+    '<div class="card"><h3>توزيع ساعات المتطوعين</h3><div class="cw"><canvas id="o_hdist"></canvas></div></div>'+
+    '<div class="card fu"><h3>الأنشطة الرئيسية</h3><div class="cw-lg"><canvas id="o_acts"></canvas></div></div>'+
+    '<div class="card"><h3>المراكز الأكثر نشاطاً</h3><div class="cw-lg"><canvas id="o_cents"></canvas></div></div>'+
+    '<div class="card"><h3>أماكن التنفيذ</h3><div class="cw"><canvas id="o_locs"></canvas></div></div>'+
+    '<div class="card"><h3>أونلاين vs حضوري</h3><div class="cw"><canvas id="o_oloff"></canvas></div></div>'+
+    '<div class="card fu"><h3>تفاصيل الأنشطة</h3><div class="tw" style="max-height:380px">'+tblDet(D2.dets,D2.hours)+'</div></div></div>'
+}
+function draw0(D2){
+  line('o_line',D2.dailys);
+  vbar('o_hdist',D2.hd.map(function(x){return x.l+'س'}),D2.hd.map(function(x){return x.c}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#f59e0b','#d97706','#dc2626']);
+  hbar('o_acts',D2.acts.map(function(x){return x.n}),D2.acts.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#f59e0b','#d97706','#059669','#34d399','#7c3aed','#0ea5e9','#14b8a6','#dc2626','#ef4444','#f97316']);
+  hbar('o_cents',D2.cents.map(function(x){return x.n+' ('+x.v+' متطوع)'}),D2.cents.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff']);
+  hbar('o_locs',D2.locs.map(function(x){return x.n}),D2.locs.map(function(x){return x.h}),['#2563eb','#059669','#f59e0b','#dc2626','#0ea5e9']);
+  vbar('o_oloff',['أونلاين','حضوري'],[D2.online.h,D2.offline.h],['#0ea5e9','#059669'])
+}
+function tab1(D2){
+  return '<div class="grid">'+
+    '<div class="card fu"><h3>ترتيب المتطوعين <span class="bdg">'+D2.tops.length+' متطوع</span></h3><div class="tw" style="max-height:460px">'+tblVols(D2.tops)+'</div></div>'+
+    '<div class="card"><h3>حسب الساعات</h3><div class="cw"><canvas id="v_hb"></canvas></div></div>'+
+    '<div class="card"><h3>حسب التفعيلات</h3><div class="cw"><canvas id="v_eb"></canvas></div></div>'+
+    '<div class="card"><h3>المتطوعون</h3><div class="cw"><canvas id="v_vc"></canvas></div></div>'+
+    '<div class="card"><h3>التفعيلات</h3><div class="cw"><canvas id="v_ec"></canvas></div></div>'+
+    '<div class="card"><h3>الساعات</h3><div class="cw"><canvas id="v_hc"></canvas></div></div></div>'
+}
+function draw1(D2){
+  var rs=[[0,5,'<5'],[5,10,'5-10'],[10,20,'10-20'],[20,30,'20-30'],[30,50,'30-50'],[50,999,'50+']];
+  vbar('v_hb',rs.map(function(r){return r[2]}),rs.map(function(r){return D2.tops.filter(function(v){return v.h>=r[0]&&v.h<r[1]}).length}),['#bfdbfe','#93c5fd','#60a5fa','#3b82f6','#2563eb','#1e3a8a']);
+  var er2=[[1,1,'1'],[2,2,'2'],[3,4,'3-4'],[5,10,'5-10'],[11,999,'11+']];
+  vbar('v_eb',er2.map(function(r){return r[2]}),er2.map(function(r){return D2.tops.filter(function(v){return v.e>=r[0]&&v.e<=r[1]}).length}),['#0ea5e9','#06b6d4','#14b8a6','#10b981','#059669']);
+  vbar('v_vc',['أونلاين','حضوري'],[D2.online.v,D2.offline.v],['#0ea5e9','#059669']);
+  vbar('v_ec',['أونلاين','حضوري'],[D2.online.e,D2.offline.e],['#0ea5e9','#059669']);
+  vbar('v_hc',['أونلاين','حضوري'],[D2.online.h,D2.offline.h],['#0ea5e9','#059669'])
+}
+function tab2(D2){
+  return '<div class="grid">'+
+    '<div class="card fu"><h3>الساعات حسب النشاط</h3><div class="cw-lg"><canvas id="a_acts"></canvas></div></div>'+
+    '<div class="card"><h3>التفعيلات حسب النشاط</h3><div class="cw"><canvas id="a_acte"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات حسب المركز</h3><div class="cw-lg"><canvas id="a_cents"></canvas></div></div>'+
+    '<div class="card"><h3>الساعات حسب المكان</h3><div class="cw"><canvas id="a_locs"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات حسب التفاصيل</h3><div class="cw-lg"><canvas id="a_dets"></canvas></div></div>'+
+    '<div class="card fu"><h3>المشاريع والجهات <span class="bdg">'+D2.projs.length+'</span></h3><div class="tw" style="max-height:380px">'+tblProj(D2.projs,D2.hours)+'</div></div></div>'
+}
+function draw2(D2){
+  var p=['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#f59e0b','#d97706','#059669','#34d399','#7c3aed','#0ea5e9','#14b8a6','#dc2626','#ef4444','#f97316'];
+  hbar('a_acts',D2.acts.slice().reverse().map(function(x){return x.n}),D2.acts.slice().reverse().map(function(x){return x.h}),p);
+  vbar('a_acte',D2.acts.map(function(x){return x.n}),D2.acts.map(function(x){return x.e}),['#fef3c7','#fde68a','#fcd34d','#fbbf24','#f59e0b','#d97706','#b45309','#fef9c3','#fef08a']);
+  hbar('a_cents',D2.cents.slice().reverse().map(function(x){return x.n+' ('+x.v+' متطوع)'}),D2.cents.slice().reverse().map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff']);
+  hbar('a_locs',D2.locs.slice().reverse().map(function(x){return x.n}),D2.locs.slice().reverse().map(function(x){return x.h}),['#2563eb','#059669','#f59e0b','#dc2626','#0ea5e9']);
+  hbar('a_dets',D2.dets.slice().reverse().map(function(x){return x.n}),D2.dets.slice().reverse().map(function(x){return x.h}),p)
+}
+function tab3(D2){
+  return '<div class="grid">'+
+    '<div class="card"><h3>الرضا عن اليوم <span class="bdg" style="background:#059669">'+D2.sats[0].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s1"></canvas></div></div>'+
+    '<div class="card"><h3>ملائمة المهمة <span class="bdg" style="background:#059669">'+D2.sats[1].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s2"></canvas></div></div>'+
+    '<div class="card"><h3>الشعور بالأمان <span class="bdg" style="background:#059669">'+D2.sats[2].m.toFixed(2)+'/5</span></h3><div class="cw"><canvas id="e_s3"></canvas></div></div>'+
+    '<div class="card"><h3>مقارنة المتوسطات</h3><div class="cw"><canvas id="e_s4"></canvas></div></div>'+
+    '<div class="card"><h3>تحقيق المستهدف <span class="bdg" style="background:'+(D2.goalPct>80?'#059669':'#d97706')+'">'+D2.goalPct+'%</span></h3><div class="cw"><canvas id="e_s5"></canvas></div></div>'+
+    '<div class="card"><h3>المشكلات خلال اليوم <span class="bdg" style="background:'+(D2.probPct<10?'#059669':'#dc2626')+'">'+D2.probPct+'%</span></h3><div class="cw"><canvas id="e_s6"></canvas></div></div>'+
+    '<div class="card fu"><h3>توزيع التقييمات</h3><div class="tw">'+tblSats(D2)+'</div></div>'+
+    '<div class="card fu"><h3>مؤشرات سريعة</h3><div class="mi">'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.goal.y+'</div><div class="ml">حققوا المستهدف</div></div>'+
+      '<div class="mi-it" style="border-color:#dc2626"><div class="mv" style="color:#dc2626">'+D2.goal.n+'</div><div class="ml">لم يحققوا</div></div>'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.prob.n+'</div><div class="ml">بلا مشكلات</div></div>'+
+      '<div class="mi-it" style="border-color:#dc2626"><div class="mv" style="color:#dc2626">'+D2.prob.y+'</div><div class="ml">بمشكلات</div></div></div></div></div>'
+}
+function draw3(D2){
+  var bg2=function(v){return v>=5?'#059669':v>=4?'#8bc34a':v>=3?'#f59e0b':v>=2?'#f97316':'#ef4444'};
+  D2.sats.forEach(function(x,i){
+    var ks=[5,4,3,2,1].filter(function(k){return x.d[k-1]>0||k===5});
+    vbar('e_s'+(i+1),ks.map(function(k){return k+'★'}),ks.map(function(k){return x.d[k-1]}),ks.map(function(k){return bg2(k)}))
+  });
+  vbar('e_s4',D2.sats.map(function(x){return x.n}),D2.sats.map(function(x){return x.m}),['#2563eb','#059669','#f59e0b']);
+  donut('e_s5',['نعم (حقق)','لا (لم يحقق)'],[D2.goal.y,D2.goal.n],['#059669','#ef4444']);
+  donut('e_s6',['لا (لم يواجه)','نعم (واجه)'],[D2.prob.n,D2.prob.y],['#059669','#ef4444'])
+}
+
+// ===== TAB 4 (Registrations) =====
+function tab4(D2){
+  return '<div class="grid">'+
+    '<div class="card fu"><h3>تفاصيل التسجيلات حسب المحافظة <span class="bdg">'+D2.govCount+' محافظة</span></h3><div class="tw" style="max-height:380px">'+tblReg(D2.govs)+'</div></div>'+
+    '<div class="card fu"><h3>توزيع حالة التسجيلات</h3><div class="cw-lg"><canvas id="r_donut"></canvas></div></div>'+
+    '<div class="card fu"><h3>التسجيلات حسب المحافظة</h3><div class="cw-lg"><canvas id="r_gov"></canvas></div></div>'+
+    '<div class="card fu"><h3>جميع التسجيلات <span class="bdg">'+D2.total+'</span></h3><div class="tw" style="max-height:420px">'+tblRegDet(filterRegRows())+'</div></div>'+
+    '<div class="card fu"><h3>مؤشرات سريعة</h3><div class="mi">'+
+      '<div class="mi-it" style="border-color:#2563eb"><div class="mv" style="color:#2563eb">'+D2.total+'</div><div class="ml">إجمالي التسجيلات</div></div>'+
+      '<div class="mi-it" style="border-color:#059669"><div class="mv" style="color:#059669">'+D2.acc+'</div><div class="ml">مقبول</div></div>'+
+      '<div class="mi-it" style="border-color:#dc2626"><div class="mv" style="color:#dc2626">'+D2.rej+'</div><div class="ml">مرفوض</div></div>'+
+      '<div class="mi-it" style="border-color:#d97706"><div class="mv" style="color:#d97706">'+D2.hold+'</div><div class="ml">هولد</div></div>'+
+      '<div class="mi-it" style="border-color:#64748b"><div class="mv" style="color:#64748b">'+D2.none+'</div><div class="ml">بدون تقييم</div></div>'+
+      '<div class="mi-it" style="border-color:#0891b2"><div class="mv" style="color:#0891b2">'+D2.govCount+'</div><div class="ml">محافظات</div></div></div></div></div>'
+}
+function draw4(D2){
+  var sts=[{n:'مقبول',c:D2.acc},{n:'مرفوض',c:D2.rej},{n:'هولد',c:D2.hold},{n:'بدون تقييم',c:D2.none}].filter(function(x){return x.c>0});
+  donut('r_donut',sts.map(function(x){return x.n}),sts.map(function(x){return x.c}),['#059669','#ef4444','#f59e0b','#94a3b8']);
+  hbar('r_gov',D2.govs.map(function(x){return x.n+' ('+x.t+')'}),D2.govs.map(function(x){return x.t}),['#2563eb','#059669','#d97706','#7c3aed','#0891b2','#dc2626','#f59e0b','#14b8a6','#f97316']);
+}
+
+// ===== REFRESH =====
+document.getElementById('rfBtn').onclick=function(){
+  document.head.removeChild(document.querySelector('script[src*="callback=handleData"]'));
+  loadData()
 };
 
-// Refresh using JSONP
-function refreshAll(){
-  var btn = document.getElementById('refBtn');
-  var icon = document.getElementById('refIcon');
-  var txt = document.getElementById('refTxt');
-  btn.disabled = true;
-  icon.innerHTML = '<span class="sp"></span>';
-  txt.textContent = 'جاري...';
-
-  var cbName = 'koboData_' + Date.now();
-  window[cbName] = function(data){
-    allData = data;
-    updateBadges();
-    renderTab();
-    btn.disabled = false;
-    icon.innerHTML = '🔄';
-    txt.textContent = 'تحديث';
-    delete window[cbName];
-  };
-
-  var script = document.createElement('script');
-  script.src = WEBAPP_URL + '?action=all&callback=' + cbName;
-  script.onerror = function(){
-    document.getElementById('mainContent').innerHTML = '<div class="err">❌ خطأ في الاتصال بالخادم. تأكد من رابط Web App</div>';
-    btn.disabled = false;
-    icon.innerHTML = '🔄';
-    txt.textContent = 'تحديث';
-    delete window[cbName];
-  };
-  document.body.appendChild(script);
-}
-
-function updateBadges(){
-  document.getElementById('regBadge').textContent = allData.registrations ? allData.registrations.length : '0';
-  document.getElementById('menBadge').textContent = allData.activations ? allData.activations.length : '0';
-}
-
-function renderTab(){
-  if(currentTab === 'reg') renderReg();
-  else renderMen();
-}
-
-// =========== REGISTRATION TAB ===========
-function renderReg(){
-  var d = allData.registrations || [];
-  document.getElementById('hdrSub').textContent = 'التسجيلات';
-  var total = d.length;
-  var approved = d.filter(function(r){ return r.status === 'مقبول'; }).length;
-  var rejected = d.filter(function(r){ return r.status === 'مرفوض'; }).length;
-  var hold = d.filter(function(r){ return r.status === 'هولد'; }).length;
-  var none = d.filter(function(r){ return r.status === 'بدون تقييم'; }).length;
-
-  var html = '<div class="grd">' +
-    '<div class="bx"><div class="nv" style="color:#2563eb">' + total + '</div><div class="lb">إجمالي التسجيلات</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#059669">' + approved + '</div><div class="lb">مقبول</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#dc2626">' + rejected + '</div><div class="lb">مرفوض</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#e37400">' + hold + '</div><div class="lb">هولد</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#64748b">' + none + '</div><div class="lb">بدون تقييم</div></div>' +
-    '</div>';
-
-  html += '<div class="card"><div class="ch"><div class="ct">ملخص المحافظات</div></div>' +
-    '<div class="tw"><table><thead><tr><th>المحافظة</th><th>المجموع</th><th>مقبول</th><th>مرفوض</th><th>هولد</th><th>بدون تقييم</th></tr></thead><tbody>';
-
-  var govs = ['الجيزه','اسيوط','المنوفيه','مطروح','شمال سيناء'];
-  var statuses = ['مقبول','مرفوض','هولد','بدون تقييم'];
-  var gt = 0, gc = [0,0,0,0];
-  for(var i = 0; i < govs.length; i++){
-    var rows = d.filter(function(r){ return r.gov === govs[i]; });
-    var t = rows.length; gt += t;
-    var cnts = statuses.map(function(s){ return rows.filter(function(r){ return r.status === s; }).length; });
-    for(var j = 0; j < 4; j++) gc[j] += cnts[j];
-    html += '<tr><td><b>' + govs[i] + '</b></td><td><b>' + t + '</b></td>';
-    html += cnts.map(function(c){ return '<td>' + c + '</td>'; }).join('');
-    html += '</tr>';
-  }
-  html += '<tr class="tot"><td><b>المجموع</b></td><td><b>' + gt + '</b></td>';
-  html += gc.map(function(c){ return '<td><b>' + c + '</b></td>'; }).join('');
-  html += '</tr></tbody></table></div></div>';
-
-  html += '<div class="card"><div class="ch"><div class="ct">جميع التسجيلات</div></div>' +
-    '<div class="flt">' +
-    '<select id="fGovReg" onchange="detReg()">' +
-    '<option value="all">كل المحافظات</option>' +
-    '<option value="الجيزه">الجيزه</option>' +
-    '<option value="اسيوط">اسيوط</option>' +
-    '<option value="المنوفيه">المنوفيه</option>' +
-    '<option value="مطروح">مطروح</option>' +
-    '<option value="شمال سيناء">شمال سيناء</option>' +
-    '</select>' +
-    '<select id="fStatReg" onchange="detReg()">' +
-    '<option value="all">كل الحالات</option>' +
-    '<option value="مقبول">مقبول</option>' +
-    '<option value="مرفوض">مرفوض</option>' +
-    '<option value="هولد">هولد</option>' +
-    '<option value="بدون تقييم">بدون تقييم</option>' +
-    '</select>' +
-    '<span id="rcntReg" style="align-self:center;font-size:12px;color:#64748b"></span>' +
-    '</div>' +
-    '<div class="tw"><table><thead><tr><th>#</th><th>المتطوع</th><th>المحافظة</th><th>التاريخ</th><th>النشاط</th><th>المشروع</th><th>الحالة</th></tr></thead><tbody id="regDetBody"></tbody></table></div></div>';
-
-  document.getElementById('mainContent').innerHTML = html;
-  detReg();
-}
-
-function detReg(){
-  var d = allData.registrations || [];
-  var fg = document.getElementById('fGovReg').value;
-  var fs = document.getElementById('fStatReg').value;
-  var fil = d;
-  if(fg !== 'all') fil = fil.filter(function(r){ return r.gov === fg; });
-  if(fs !== 'all') fil = fil.filter(function(r){ return r.status === fs; });
-  var tb = document.getElementById('regDetBody');
-  if(!tb) return;
-  if(!fil.length){
-    tb.innerHTML = '<tr><td colspan="7" style="padding:30px;color:#999">لا توجد بيانات</td></tr>';
-    document.getElementById('rcntReg').textContent = '0';
-    return;
-  }
-  document.getElementById('rcntReg').textContent = fil.length + ' سجل';
-  tb.innerHTML = fil.slice(0,2000).map(function(r, i){
-    var bc = r.status === 'مقبول' ? 'ba' : r.status === 'مرفوض' ? 'br' : r.status === 'هولد' ? 'bh' : 'bn';
-    return '<tr><td>' + (i+1) + '</td><td>' + r.name + '</td><td>' + r.gov + '</td><td>' + r.date + '</td><td>' + r.mgt + '</td><td>' + r.proj + '</td><td><span class="bdg ' + bc + '">' + r.status + '</span></td></tr>';
-  }).join('');
-}
-
-// =========== MENOUFIA TAB ===========
-function renderMen(){
-  var rows = allData.activations || [];
-  document.getElementById('hdrSub').textContent = 'المنوفيه - التفعيلات';
-  if(!rows.length){
-    document.getElementById('mainContent').innerHTML = '<div class="card" style="text-align:center;padding:40px;color:#94a3b8">لا توجد بيانات تفعيلات</div>';
-    return;
-  }
-
-  var vols = {}, hours = 0, days = {};
-  rows.forEach(function(r){
-    var h = +r.h || 0; hours += h;
-    if(!vols[r.v]) vols[r.v] = 0; vols[r.v] += h;
-    days[r.d] = 1;
-  });
-  var volCount = Object.keys(vols).length;
-  var dayCount = Object.keys(days).length;
-  var online = rows.filter(function(r){ return r.l === 'Online'; }).length;
-  var offline = rows.filter(function(r){ return r.l !== 'Online'; }).length;
-
-  var html = '<div class="grd">' +
-    '<div class="bx"><div class="nv" style="color:#2563eb">' + volCount + '</div><div class="lb">المتطوعون</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#059669">' + rows.length + '</div><div class="lb">التفعيلات</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#d97706">' + hours.toFixed(1) + '</div><div class="lb">الساعات</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#7c3aed">' + dayCount + '</div><div class="lb">أيام</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#0891b2">' + online + '</div><div class="lb">أونلاين</div></div>' +
-    '<div class="bx"><div class="nv" style="color:#059669">' + offline + '</div><div class="lb">حضوري</div></div>' +
-    '</div>';
-
-  var acts = {}, dets = {}, locs = {};
-  rows.forEach(function(r){
-    var h = +r.h || 0;
-    if(!acts[r.sa]) acts[r.sa] = {e:0, h:0};
-    acts[r.sa].e++; acts[r.sa].h += h;
-    if(!dets[r.ad]) dets[r.ad] = {e:0, h:0};
-    dets[r.ad].e++; dets[r.ad].h += h;
-    if(!locs[r.l]) locs[r.l] = {e:0, h:0};
-    locs[r.l].e++; locs[r.l].h += h;
-  });
-
-  function toArr(dic){
-    var a = [];
-    for(var k in dic) a.push({n:k, e:dic[k].e, h:Math.round(dic[k].h*10)/10});
-    a.sort(function(a,b){ return b.h - a.h; });
-    return a;
-  }
-
-  function tbl(arr){
-    var h = '<table><tr><th>#</th><th>البند</th><th>عدد</th><th>ساعات</th></tr>';
-    arr.forEach(function(x,i){
-      h += '<tr' + (i%2 ? ' style="background:rgba(30,58,138,.015)"' : '') + '><td>' + (i+1) + '</td><td style="text-align:right">' + x.n + '</td><td>' + x.e + '</td><td><b>' + x.h + '</b></td></tr>';
-    });
-    return h + '</table>';
-  }
-
-  html += '<div class="gr2">' +
-    '<div class="card"><div class="ch"><div class="ct">الأنشطة الرئيسية</div></div><div class="tw">' + tbl(toArr(acts)) + '</div></div>' +
-    '<div class="card"><div class="ch"><div class="ct">تفاصيل الأنشطة</div></div><div class="tw">' + tbl(toArr(dets)) + '</div></div>' +
-    '<div class="card"><div class="ch"><div class="ct">أماكن التنفيذ</div></div><div class="tw">' + tbl(toArr(locs)) + '</div></div>' +
-    '<div class="card"><div class="ch"><div class="ct">الساعات اليومية</div></div>' +
-    '<div class="flt"><select id="menChartType" onchange="drawMenChart()"><option value="hours">ساعات</option><option value="count">تفعيلات</option></select><span id="menChartRcnt" style="font-size:12px;color:#64748b"></span></div>' +
-    '<canvas id="menChart" style="width:100%;height:240px"></canvas></div>' +
-    '</div>';
-
-  var topArr = [];
-  for(var k in vols) topArr.push({n:k, h:Math.round(vols[k]*10)/10});
-  topArr.sort(function(a,b){ return b.h - a.h; });
-  html += '<div class="card"><div class="ch"><div class="ct">أكثر المتطوعين ساعات</div></div><div class="tw" style="max-height:300px">' +
-    '<table><tr><th>#</th><th>المتطوع</th><th>الساعات</th><th>النسبة</th></tr>';
-  topArr.slice(0, 100).forEach(function(x,i){
-    html += '<tr' + (i%2 ? ' style="background:rgba(30,58,138,.015)"' : '') + '><td>' + (i+1) + '</td><td style="text-align:right">' + x.n + '</td><td><b>' + x.h + '</b></td><td>' + (hours ? Math.round(x.h/hours*100) + '%' : '') + '</td></tr>';
-  });
-  html += '</table></div></div>';
-
-  document.getElementById('mainContent').innerHTML = html;
-  drawMenChart();
-}
-
-function drawMenChart(){
-  var rows = allData.activations || [];
-  var type = document.getElementById('menChartType') ? document.getElementById('menChartType').value : 'hours';
-  var daily = {};
-  rows.forEach(function(r){
-    if(!daily[r.d]) daily[r.d] = {h:0, c:0};
-    daily[r.d].h += +r.h || 0;
-    daily[r.d].c++;
-  });
-  var days = Object.keys(daily).filter(function(k){ return k && k.length === 10; }).sort();
-  var rcnt = document.getElementById('menChartRcnt');
-  if(rcnt) rcnt.textContent = days.length + ' يوم';
-  var canvas = document.getElementById('menChart');
-  if(!canvas || !days.length) return;
-  var H = 240;
-  var W = canvas.parentElement.clientWidth || 600;
-  canvas.width = W; canvas.height = H;
-  var ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, W, H);
-  var vals = days.map(function(d){ return type === 'hours' ? Math.round(daily[d].h*10)/10 : daily[d].c; });
-  var mx = Math.max.apply(null, vals) || 1;
-  var pt = 20, pb = 30, pl = 6, pr = 6;
-  var gap = Math.max(1, W * 0.005);
-  var bw = Math.max(3, (W - pl - pr - gap * (days.length + 1)) / days.length);
-  for(var i = 0; i < days.length; i++){
-    var x = pl + gap + i * (bw + gap);
-    var bh = Math.max(2, (vals[i] / mx) * (H - pt - pb));
-    var y2 = H - pb - bh;
-    ctx.fillStyle = i % 2 === 0 ? '#1e3a8a' : '#60a5fa';
-    ctx.beginPath(); ctx.rect(x, y2, bw, bh); ctx.fill();
-    ctx.fillStyle = '#0f172a';
-    ctx.font = 'bold 9px Arial';
-    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-    ctx.fillText(vals[i], x + bw/2, Math.max(y2 - 2, 12));
-    if(i % 3 === 0 || i === days.length - 1){
-      ctx.fillStyle = '#64748b';
-      ctx.font = '7px Arial';
-      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
-      ctx.fillText(days[i].slice(5), x + bw/2, H - pb + 4);
-    }
-  }
-}
-
-// Load on start
-refreshAll();
+// ===== INIT =====
+loadData();
 </script>
 </body>
 </html>
