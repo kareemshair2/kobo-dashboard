@@ -8,7 +8,7 @@
  * - 3 sheets: التسجيلات | التفعيلات | ملخص
  */
 
-var SPREADSHEET_ID = '10-kfVFDZwfMUzigxim5hnoZgLGpoRtUKIX-FyirRsrg';
+var SPREADSHEET_ID = '1RTGsjKDJHk3V4HDLpJphPec93Nab1CH1jRS4-aDlmj0';
 var ASSET_UID      = 'a7PGdw9HKAPSbQnRDqcaBY';
 var API_TOKEN      = 'c11e9a852cbac05d330706a8c57a767cef69d39b';
 var KOBO_BASE      = 'https://eu.kobotoolbox.org';
@@ -454,13 +454,13 @@ function importKoboIncremental() {
 }
 
 // =============================================================
-// التسجيلات — كل المحافظات (12 عمود)
+// التسجيلات — كل المحافظات (14 عمود)
 // =============================================================
 
 var REG_HEADERS = [
   'المتطوع', '_id', 'المحافظة', 'تاريخ النشاط', 'الإدارة التخصصية',
   'بند الإدارة', 'المشروع', 'الحالة', 'مكان النشاط',
-  'وقت التقديم', 'الاعتماد', 'معتمد بواسطة', 'وقت الاعتماد'
+  'الجامعة', 'وقت التقديم', 'الاعتماد', 'معتمد بواسطة', 'وقت الاعتماد'
 ];
 
 function writeRegistrations(records, fullSync) {
@@ -492,6 +492,7 @@ function writeRegistrations(records, fullSync) {
       ar(PROJ_MAP, r.Project),
       getRegStatus(r),
       translateKoboField('Place_Activity', r.Place_Activity) || translateKoboField('City', r.Place_Activity) || r.Place_Activity || '',
+      ar(UNIV_MAP, r.University) || r.University || '',
       r._submission_time || '',
       getValidationInfo(r).status,
       getValidationInfo(r).by,
@@ -500,16 +501,13 @@ function writeRegistrations(records, fullSync) {
 
     var eId = String(r._id);
     if (existingIds[eId]) {
-      // موجود: حدث الاعتماد بس (الأعمدة 11,12,13)
-      updateRows.push([row[10], row[11], row[12]]);
+      updateRows.push([row[11], row[12], row[13]]);
       updateRange.push(existingIds[eId]);
     } else {
-      // جديد: أضف الصف كامل
       newRows.push(row);
     }
   }
 
-  // إضافة الجديد
   if (newRows.length) {
     if (isNew) {
       var allData = [REG_HEADERS].concat(newRows);
@@ -523,10 +521,9 @@ function writeRegistrations(records, fullSync) {
     }
   }
 
-  // تحديث الاعتماد للموجود
   if (updateRows.length && !isNew) {
     for (var u = 0; u < updateRows.length; u++) {
-      sheet.getRange(updateRange[u], 11, 1, 3).setValues([updateRows[u]]);
+      sheet.getRange(updateRange[u], 12, 1, 3).setValues([updateRows[u]]);
     }
   }
 
@@ -539,7 +536,7 @@ function writeRegistrations(records, fullSync) {
 
 var ACT_HEADERS = [
   'المتطوع', '_id', 'المحافظة', 'التاريخ', 'الإدارة', 'بند الإدارة',
-  'المكان', 'المركز', 'الساعات', 'المشروع',
+  'المكان', 'المركز', 'الجامعة', 'الساعات', 'المشروع',
   'التقييم1', 'التقييم2', 'التقييم3', 'حقق هدف', 'مشكلات',
   'الاعتماد', 'معتمد بواسطة', 'وقت الاعتماد'
 ];
@@ -574,6 +571,7 @@ function writeActivations(records, fullSync) {
       ar(ITEM_MAP, r.Office_administration_items),
       translateKoboField('Place_Activity', r.Place_Activity) || translateKoboField('City', r.Place_Activity) || r.Place_Activity || '',
       translateKoboField('City', r.City) || r.City || '',
+      ar(UNIV_MAP, r.University) || r.University || '',
       getHours(r),
       ar(PROJ_MAP, r.Project),
       r['ReviewQ/Review1'] || '',
@@ -586,7 +584,7 @@ function writeActivations(records, fullSync) {
 
     var eId = String(r._id);
     if (existingIds[eId]) {
-      updateRows.push([row[15], row[16], row[17]]);
+      updateRows.push([row[16], row[17], row[18]]);
       updateRange.push(existingIds[eId]);
     } else {
       newRows.push(row);
@@ -608,7 +606,7 @@ function writeActivations(records, fullSync) {
 
   if (updateRows.length && !isNew) {
     for (var u = 0; u < updateRows.length; u++) {
-      sheet.getRange(updateRange[u], 16, 1, 3).setValues([updateRows[u]]);
+      sheet.getRange(updateRange[u], 17, 1, 3).setValues([updateRows[u]]);
     }
   }
 

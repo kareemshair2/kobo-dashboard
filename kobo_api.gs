@@ -5,7 +5,7 @@
  * - يدعم JSONP callback
  */
 
-var SPREADSHEET_ID = '10-kfVFDZwfMUzigxim5hnoZgLGpoRtUKIX-FyirRsrg';
+var SPREADSHEET_ID = '1RTGsjKDJHk3V4HDLpJphPec93Nab1CH1jRS4-aDlmj0';
 
 function getSS() {
   return SpreadsheetApp.openById(SPREADSHEET_ID);
@@ -44,7 +44,7 @@ function doGet(e) {
 
 // ====== التسجيلات ======
 // الأعمدة: المتطوع, _id, المحافظة, تاريخ النشاط, الإدارة, بند الإدارة,
-//          المشروع, الحالة, مكان النشاط, وقت التقديم,
+//          المشروع, الحالة, مكان النشاط, الجامعة, وقت التقديم,
 //          الاعتماد, معتمد بواسطة, وقت الاعتماد
 function getRegistrationData() {
   var sheet = getSS().getSheetByName('التسجيلات');
@@ -66,10 +66,11 @@ function getRegistrationData() {
       proj: r[6] || '',
       status: r[7] || 'بدون تقييم',
       place: r[8] || '',
-      time: r[9] || '',
-      ver: r[10] || '',
-      verBy: r[11] || '',
-      verAt: r[12] || ''
+      univ: r[9] || '',
+      time: r[10] || '',
+      ver: r[11] || '',
+      verBy: r[12] || '',
+      verAt: r[13] || ''
     });
   }
   return rows;
@@ -77,7 +78,7 @@ function getRegistrationData() {
 
 // ====== التفعيلات ======
 // الأعمدة: المتطوع, _id, المحافظة, التاريخ, الإدارة, بند الإدارة,
-//          المكان, المركز, الساعات, المشروع,
+//          المكان, المركز, الجامعة, الساعات, المشروع,
 //          التقييم1, التقييم2, التقييم3, حقق هدف, مشكلات,
 //          الاعتماد, معتمد بواسطة, وقت الاعتماد
 var ACT_SIMPLE = {
@@ -115,7 +116,7 @@ function getActivationData() {
   for (var i = 1; i < vals.length; i++) {
     var r = vals[i];
     var mgt = r[4] || '';
-    var h = parseFloat(r[8]) || 0;
+    var h = parseFloat(r[9]) || 0;
     rows.push({
       v: r[0] || '',
       id: String(r[1] || i),
@@ -125,17 +126,18 @@ function getActivationData() {
       ad: r[5] || '',
       l: r[6] || '',
       c: r[7] || '',
+      univ: r[8] || '',
       h: h,
-      p: r[9] || '',
-      s1: r[10] || '',
-      s2: r[11] || '',
-      s3: r[12] || '',
-      g: r[13] || '',
-      pb: r[14] || '',
+      p: r[10] || '',
+      s1: r[11] || '',
+      s2: r[12] || '',
+      s3: r[13] || '',
+      g: r[14] || '',
+      pb: r[15] || '',
       sa: ACT_SIMPLE[mgt] || mgt,
-      ver: r[15] || '',
-      verBy: r[16] || '',
-      verAt: r[17] || ''
+      ver: r[16] || '',
+      verBy: r[17] || '',
+      verAt: r[18] || ''
     });
   }
   return rows;
