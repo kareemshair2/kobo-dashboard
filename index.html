@@ -282,7 +282,7 @@ function loadData(){
   loadTimeout=setTimeout(function(){
     showStatus('err','⚠️ لم يتم تحميل البيانات بعد. تأكد من تفعيل Web App في Google Apps Script');
     document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:14px;color:#64748b">المشكلة: الخادم لم يستجب بعد<br>الحل: افتح الرابط التالي أولاً في متصفحك وسَمح بالأذونات، ثم ارجع للداشبورد:<br><a href="'+API_URL+'" target="_blank" style="color:#2563eb;font-size:13px">افتح Web App للتجربة</a><br><br><button class="tb" style="background:#1e3a8a;color:#fff;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;margin-top:8px" onclick="loadData()">🔄 إعادة المحاولة</button></div></div>'
-  },20000)
+  },60000)
 }
 
 function handleData(resp){
@@ -354,8 +354,9 @@ var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode
 function buildFilters(){
   var opts=function(arr){return arr.map(function(v){return '<option>'+v+'</option>'}).join('')};
   var defFrom=FO.minDate>'2026-01-01'?FO.minDate:'2026-01-01';
+  var today=new Date();var todayStr=today.getFullYear()+'-'+(today.getMonth()+1).toString().padStart(2,'0')+'-'+today.getDate().toString().padStart(2,'0');
   var h='<label>من:</label><input type="date" id="fDf" value="'+defFrom+'" style="max-width:110px">';
-  h+='<label>إلى:</label><input type="date" id="fDt" value="'+FO.maxDate+'" style="max-width:110px">';
+  h+='<label>إلى:</label><input type="date" id="fDt" value="'+todayStr+'" style="max-width:110px">';
   h+='<label>المحافظة:</label><select id="fG"><option value="">الكل</option>'+opts(REG_FO.governorates)+'</select>';
   h+='<label>حالة التسجيل:</label><select id="fS"><option value="">الكل</option>'+opts(REG_FO.statuses)+'</select>';
   h+='<label>المركز:</label><select id="fC"><option value="">الكل</option>'+opts(FO.centers)+'</select>';
@@ -378,8 +379,9 @@ function readF(nr){
 }
 function applyF(){readF();r(curTab)}
 function resetF(){
+  var today=new Date();var todayStr=today.getFullYear()+'-'+(today.getMonth()+1).toString().padStart(2,'0')+'-'+today.getDate().toString().padStart(2,'0');
   document.getElementById('fDf').value=FO.minDate>'2026-01-01'?FO.minDate:'2026-01-01';
-  document.getElementById('fDt').value=FO.maxDate;
+  document.getElementById('fDt').value=todayStr;
   document.getElementById('fG').value='';
   document.getElementById('fS').value='';
   document.getElementById('fC').value='';
