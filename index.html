@@ -369,17 +369,11 @@ function buildFilters(){
   document.getElementById('fltrs').innerHTML=h
 }
 
-function readF(){
-  F.dFrom=document.getElementById('fDf').value;
-  F.dTo=document.getElementById('fDt').value;
-  F.gov=document.getElementById('fG').value;
-  F.status=document.getElementById('fS').value;
-  F.center=document.getElementById('fC').value;
-  F.project=document.getElementById('fP').value;
-  F.activity=document.getElementById('fA').value;
-  F.location=document.getElementById('fL').value;
-  F.mode=document.getElementById('fM').value;
-  F.univ=document.getElementById('fU').value
+function readF(nr){
+  var g=function(id){return document.getElementById(id).value};
+  if(nr) return{dFrom:g('fDf'),dTo:g('fDt'),gov:g('fG'),status:g('fS'),center:g('fC'),project:g('fP'),activity:g('fA'),location:g('fL'),mode:g('fM'),univ:g('fU')};
+  F.dFrom=g('fDf');F.dTo=g('fDt');F.gov=g('fG');F.status=g('fS');F.center=g('fC');
+  F.project=g('fP');F.activity=g('fA');F.location=g('fL');F.mode=g('fM');F.univ=g('fU')
 }
 function applyF(){readF();r(curTab)}
 function resetF(){
@@ -621,13 +615,15 @@ function donut(id,la,va,co){
 // ===== TABLES =====
 function tblVols(arr){
   var ttl=arr.reduce(function(s,r){return s+r.h},0);
+  var max=Math.min(arr.length,100);
   var h='<table><tr><th>#</th><th>الاسم</th><th>الساعات</th><th>التفعيلات</th><th>المتوسط</th><th>%</th></tr>';
-  arr.forEach(function(x,i){
+  for(var i=0;i<max;i++){var x=arr[i];
     var hl=i<3?'font-weight:700;color:'+pC():'';
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td style="'+hl+'">'+(i+1)+'</td>'+
       '<td style="text-align:right;'+hl+'">'+x.n+'</td><td><b>'+(i<3?'⭐ ':'')+fmt(x.h)+'</b></td>'+
       '<td>'+x.e+'</td><td>'+(x.e?fmt(x.h/x.e):'0')+'</td><td>'+pct(x.h,ttl)+'%</td></tr>'
-  });return h+'</table>'
+  };if(arr.length>max)h+='<tr><td colspan="6" style="text-align:center;color:#64748b;padding:12px">... و'+(arr.length-max)+' متطوع آخر</td></tr>';
+  return h+'</table>'
 }
 function tblSats(D2){
   var h='<table><tr><th>المؤشر</th><th>المتوسط</th><th>5★</th><th>4</th><th>3</th><th>2</th><th>1</th></tr>';
@@ -637,16 +633,20 @@ function tblSats(D2){
   });return h+'</table>'
 }
 function tblDet(arr,ttlH){
+  var max=Math.min(arr.length,100);
   var h='<table><tr><th>#</th><th>تفاصيل النشاط</th><th>تفعيلات</th><th>ساعات</th><th>%</th></tr>';
-  arr.forEach(function(x,i){
+  for(var i=0;i<max;i++){var x=arr[i];
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+x.n+'</td><td>'+x.e+'</td><td><b>'+fmt(x.h)+'</b></td><td>'+pct(x.h,ttlH)+'%</td></tr>'
-  });return h+'</table>'
+  };if(arr.length>max)h+='<tr><td colspan="5" style="text-align:center;color:#64748b;padding:12px">... و'+(arr.length-max)+' نشاط آخر</td></tr>';
+  return h+'</table>'
 }
 function tblProj(arr,ttlH){
+  var max=Math.min(arr.length,100);
   var h='<table><tr><th>#</th><th>المشروع/الجهة</th><th>تفعيلات</th><th>ساعات</th><th>%</th></tr>';
-  arr.forEach(function(x,i){
+  for(var i=0;i<max;i++){var x=arr[i];
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+x.n+'</td><td>'+x.e+'</td><td><b>'+fmt(x.h)+'</b></td><td>'+pct(x.h,ttlH)+'%</td></tr>'
-  });return h+'</table>'
+  };if(arr.length>max)h+='<tr><td colspan="5" style="text-align:center;color:#64748b;padding:12px">... و'+(arr.length-max)+' مشروع آخر</td></tr>';
+  return h+'</table>'
 }
 function tblReg(arr){
   var h='<table><tr><th>#</th><th>المحافظة</th><th>إجمالي</th><th>مقبول</th><th>%</th><th>مرفوض</th><th>%</th><th>هولد</th><th>%</th></tr>';
@@ -655,11 +655,13 @@ function tblReg(arr){
   });return h+'</table>'
 }
 function tblRegDet(rows){
+  var max=Math.min(rows.length,100);
   var h='<table><tr><th>#</th><th>الاسم</th><th>المحافظة</th><th>حالة التسجيل</th><th>التاريخ</th></tr>';
-  rows.forEach(function(r,i){
+  for(var i=0;i<max;i++){var r=rows[i];
     var bg=r.status==='مقبول'?'color:#1e7e34;font-weight:600':r.status==='مرفوض'?'color:#c5221f;font-weight:600':r.status==='هولد'?'color:#e37400;font-weight:600':'color:#5f6368';
     h+='<tr'+(i%2?' class="tr-alt"':'')+'><td>'+(i+1)+'</td><td style="text-align:right">'+r.name+'</td><td>'+r.gov+'</td><td style="'+bg+'">'+r.status+'</td><td>'+(r.date||'')+'</td></tr>'
-  });return h+'</table>'
+  };if(rows.length>max)h+='<tr><td colspan="5" style="text-align:center;color:#64748b;padding:12px">... و'+(rows.length-max)+' سجل آخر</td></tr>';
+  return h+'</table>'
 }
 
 // ===== INSIGHTS =====
@@ -718,19 +720,24 @@ function renderExecReg(D2){
     '<div class="ec"><div class="nv" style="color:'+(isDark()?'#f87171':'#dc2626')+'">'+(D2.none||'0')+'</div><div class="lb">بدون تقييم</div></div></div>'
 }
 
+var CACHE={d:null,rd:null,f:{}};
+function isCacheDirty(){
+  var f=readF(true);for(var k in f)if(f[k]!==CACHE.f[k])return true;
+  return false
+}
 function r(i){curTab=i;
+  var dirty=isCacheDirty();
+  if(dirty||!CACHE.d){var rf=filterRegRows();CACHE.rd=computeReg(rf)}
+  if(dirty||!CACHE.d){var af=filterRows();CACHE.d=compute(af);CACHE.f=readF(true)}
   if(i===4){
-    var rows=filterRegRows();
-    D=computeReg(rows);
+    D=CACHE.rd;
     document.getElementById('execArea').innerHTML=renderExecReg(D);
     document.getElementById('insights').innerHTML='<h3>📊 حالة التسجيلات</h3><div class="ins-grid">'+
       genRegInsights(D).map(function(t){return '<div class="ins-item">'+t+'</div>'}).join('')+'</div>';
     document.getElementById('x').innerHTML=tab4(D);
     setTimeout(draw4,50,D)
   }else{
-    RD=computeReg(filterRegRows());
-    var rows=filterRows();
-    D=compute(rows);
+    D=CACHE.d;RD=CACHE.rd;
     var aIns=genInsights(D),rIns=genRegInsights(RD);
     var allIns=aIns.concat(rIns);
     document.getElementById('execArea').innerHTML=renderExec(D)+(i===0?renderExecReg(RD):'');
