@@ -399,7 +399,7 @@ function filterRows(){
     if(F.activity && r.sa !== F.activity) return false;
     if(F.location && r.l !== F.location) return false;
     if(F.mode && (F.mode==='Online' ? r.l!=='Online' : r.l==='Online')) return false;
-    if(F.univ && r.univ !== F.univ) return false;
+    if(F.univ && r.univ && r.univ !== F.univ) return false;
     return true
   })
 }
@@ -408,7 +408,7 @@ function filterRegRows(){
   return REG_DATA.filter(function(r){
     if(F.gov && r.gov !== F.gov) return false;
     if(F.status && r.status !== F.status) return false;
-    if(F.univ && r.univ !== F.univ) return false;
+    if(F.univ && r.univ && r.univ !== F.univ) return false;
     return true
   })
 }
