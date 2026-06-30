@@ -181,7 +181,45 @@ tr:hover td{background:rgba(30,58,138,.04)}
 </div>
 
 <script>
-var API_URL = 'https://script.google.com/macros/s/AKfycbx9rqFN89qoxu7p7NBZN-ohlogdi8RicKYCIdU_2U1cdVOWPYGZ5Px3kaq6fpH0eAIB/exec';
+// ====== خرائط الترجمة العربية ======
+var GOVS = {
+  EGY17: 'المنوفيه', EGY21: 'الجيزه', EGY25: 'اسيوط',
+  EGY33: 'مطروح', EGY34: 'شمال سيناء'
+};
+var PLACE_MAP = {Main:'فاعلية مركزية',Office:'داخل مقر المكتب / الجمعية',City:'أحد مراكز المحافظة',Village:'أحد قرى المحافظة',Online:'Online',central_office:'المقر المركزي للمؤسسة'};
+var ACT_MAP = {Attracting_receiving:'جذب واستقبال المتطوعين',Regular_meetings:'اجتماعات دورية',training:'تدريبات',Research_interviews:'أبحاث ومقابلات',Implementing_interventions:'تنفيذ تدخلات',Clothing_exhibitions:'معارض الملابس',Medical_convoys:'قوافل طبية',Events:'الفعاليات',Literacy:'محو الأمية',Teaching_children:'تعليم الأطفال',Awareness:'توعية',Raising_settlements:'رفع التسويات',Follow_evaluation:'متابعة وتقييم',fundraising:'التمويل',Communicate_support:'تواصل ودعم',Line_up:'اصطفاف',Technical_Support:'Technical Support',leadership_tasks:'الإشراف والمتابعات الدورية',feeding:'إطعام',Logistics_activities:'أنشطة لوجيستية',Activate_volunteers:'تفعيل المتطوعين'};
+var ITEM_MAP = {item_1:'عضو مجلس إدارة المتطوعين',item_2:'معاون مجلس إدارة المتطوعين',item_3:'الفريق المركزي',item_4:'منسق محافظة',item_5:'مكالمات',item_6:'جذب المتطوعين',item_7:'استقبال المتطوعين',item_8:'تسكين المتطوعين على الانشطة',item_9:'اجتماع بورد المحافظة',item_10:'اجتماع الهيكل التنفيذي',item_11:'زيارات المراكز',item_12:'اجتماع فريق',item_13:'تنظيم',item_14:'مدرب',item_15:'متدرب',item_16:'Initial Form',item_17:'Intake Form',item_18:'Campaign Form',item_19:'اتفاقات',item_20:'رفع قرية',item_21:'Intake فلسطين',item_22:'أستمارة إعادة الدمج',item_23:'EU Childrens',item_24:'EU Adults',item_25:'استمارة اللاجئين',item_26:'أسقف',item_27:'اطعام',item_28:'اعانة مالية',item_29:'أغطية',item_30:'تجهيز عروسة',item_31:'ترميم منزل',item_32:'جهاز تعويضي',item_33:'جهاز كهربائي',item_34:'دفع ايجار',item_35:'سداد دين',item_36:'سلة غذائية',item_37:'شنط مدرسية',item_38:'عملية جراحية',item_39:'كرتونة غذائية',item_40:'كسوة',item_41:'كفالة تعليمية',item_42:'كفالة صحية',item_43:'زيارة مع مريض',item_44:'صرف روشتات',item_45:'كفالة يتيم',item_46:'لحوم أضاحي',item_47:'مستلزمات مسكن',item_48:'مشروع صغير',item_49:'مفروشات',item_50:'زكاة فطر',item_51:'وصلة مياه',item_52:'تدخلات الحماية SGBV',item_53:'الدعم النفسي',item_54:'الدعم القانوني',item_55:'خدمات تعليمية',item_56:'تدريبات مهنية',item_57:'تحصيل الملابس',item_58:'فرز الملابس',item_59:'تنفيذ معرض ملابس',item_60:'توريد عائد المعارض',item_61:'صيدلية',item_63:'كشف',item_64:'أنشطة دمج أحسن صاحب',item_65:'زيارة دار أيتام',item_66:'زيارة دار مسنين',item_67:'زيارة مستشفي',item_68:'تبرع بالدم',item_69:'دوبامين',item_70:'أنشطة الأطفال',item_71:'إفطارات صناع الحياة',item_72:'حفلات المحافظات',item_73:'مهرجان الأضاحي',item_74:'أنشطة ترفيهية وتحفيزية',item_75:'نشاط الأطفال',item_76:'جذب الاميين',item_77:'تدريب الميسرين',item_78:'فتح الفصول',item_79:'إستكتاب',item_80:'إمتحانات فورية',item_81:'توفير فرص وظيفية',item_82:'توعية صحية',item_83:'توعية بيئية',item_84:'توعية عامة',item_85:'تسويات',item_86:'زيارات ميدانية',item_87:'تبرعات مالية',item_88:'تبرعات عينية',item_89:'الحملات الميدانية',item_90:'اتفاقات وشراكات',item_91:'حل مشاكل',item_92:'رسائل شكر',item_93:'رسائل عامة',item_94:'رسائل تهنئة',item_95:'زدني (تعليم اساسيات الدين)',item_96:'تنمية مهارات',item_97:'تعديل سلوك',item_98:'تكميلي',item_99:'IT',item_100:'Graphic Design',item_101:'Video Editing',item_102:'Digital Marketing',item_103:'Data Entry',item_104:'Data Analysis',item_105:'Photography',item_106:'Content writing',item_107:'Moderation',item_108:'Voice over',item_109:'مراجعة أبحاث',item_110:'survey',item_111:'Documentation',item_112:'Quality control',item_113:'استلام وجبات',item_114:'توزيع وجبات',item_115:'تجهيز لوجستيك',item_116:'استلام لوجستيك',item_117:'توزيع لوجستيك',item_118:'مطبخ خيري',item_119:'متابعة التسجيلات',item_120:'تأكيد التسجيلات',item_121:'تبادل الخبرات'};
+var PROJ_MAP = {Project_1:'أحسن صاحب',Project_2:'التنمية الشاملة طما',Project_3:'التنمية الشاملة قفط',Project_4:'Plan',Project_5:'الطوارئ',Project_6:'المساعدات الانسانية',Project_7:'الاحتياجات الاساسية',Project_8:'فلسطين',Project_9:'رزق حلال',Project_10:'دار وسلامة',Project_11:'نور حياتهم',Project_12:'عيش وملح',Project_13:'Duke',Project_14:'قدوة',Project_15:'أتجنن',Project_16:'إنسان',Project_17:'تنمية المتطوعين',Project_18:'نشاط داخلي خاص بالمكتب / الجمعية',Project_19:'التمويل المركزي',Project_20:'مجلس ادارة المتطوعين',Project_21:'رابطة اسر الجامعات المصرية',Project_22:'جذب واستقبال المتطوعين',Project_23:'إدارة الحالة',Project_24:'sawa - سوا',Project_25:'UNCHR',Project_26:'Frontex',Project_27:'قوافل داخلية خاصة بالمكتب / الجمعية',Project_28:'قوافل التحالف',Project_29:'قوافل التضامن',Project_30:'قوافل تحيا مصر',Project_31:'دشنا',Project_32:'الجمعية',Project_33:'متابعة وتقييم مركزي',Project_34:'النخيل',Project_35:'الغسيل الكلوي',Project_36:'السنتر التعليمي',Project_37:'قوافل غزة',Project_38:'NRC',Project_39:'حصاد المستقبل',Project_40:'step forword - خطوات للأمام',Project_41:'قوافل تساهيل الطبية',Project_42:'جرين جين',Project_43:'مراكز تنمية الأسرة والطفل'};
+var CITY_MAP = {EGY1702:'مركز شبين الكوم',EGY1703:'مركز الشهداء',EGY1704:'مركز تلا',EGY1705:'مركز بركه السبع',EGY1706:'مركز قويسنا',EGY1707:'مركز الباجور',EGY1708:'مركز اشمون',EGY1709:'مدينه سرس الليان',EGY1710:'مركز منوف',EGY1711:'مركز السادات',EGY1701:'مدينه منوف',EGY2101:'مدينه الجيزه',EGY2102:'مركز الجيزه',EGY2103:'مركز كرداسه',EGY2104:'مركز اوسيم',EGY2105:'مركز البدرشين',EGY2106:'مركز العياط',EGY2107:'مركز الصف',EGY2108:'مركز أطفيح',EGY2109:'مركز الواحات البحريه',EGY2110:'مركز منشأة القناطر',EGY2111:'مركز ابو النمرس',EGY2112:'6 أكتوبر',EGY2113:'الشيخ زايد',EGY2501:'مدينه اسيوط',EGY2502:'مركز اسيوط',EGY2503:'مركز ابوتيج',EGY2504:'مركز الغنايم',EGY2505:'مركز صدفا',EGY2506:'مركز منفلوط',EGY2507:'مركز القوصيه',EGY2508:'مركز ديروط',EGY2509:'مركز ابنوب',EGY2510:'مركز الفتح',EGY2511:'مركز ساحل سليم',EGY2512:'مركز البدارى',EGY2513:'مدينه اسيوط الجديده',EGY3301:'مدينه مرسى مطروح',EGY3302:'مدينه النجيله',EGY3303:'مدينه سيدى برانى',EGY3304:'مدينه السلوم',EGY3305:'مدينه الضبعه',EGY3306:'مدينه العلمين',EGY3307:'مدينه الحمام',EGY3308:'مدينه سيوه',EGY3309:'مدينه الساحل الشمالى',EGY3401:'مدينه العريش',EGY3402:'مدينه بئر العبد',EGY3403:'مدينه رمانه',EGY3404:'مدينه الحسنه',EGY3405:'مدينه نخل',EGY3406:'مدينه القسيمه',EGY3407:'مدينه الشيخ زويد',EGY3408:'مدينه رفح'};
+var VALID_STATUS_MAP = {validation_status_approved:'معتمد',validation_status_not_approved:'غير معتمد',validation_status_on_hold:'معلق'};
+var STATUS_LEGACY_MAP = {validation_status_approved:'مقبول',validation_status_not_approved:'مرفوض',validation_status_on_hold:'هولد'};
+var ACT_SIMPLE = {'جذب واستقبال المتطوعين':'جذب','اجتماعات دورية':'اجتماعات','تدريبات':'تدريبات','أبحاث ومقابلات':'أبحاث','تنفيذ تدخلات':'تدخلات','معارض الملابس':'ملابس','قوافل طبية':'قوافل','الفعاليات':'الفعاليات','محو الأمية':'محو أمية','تعليم الأطفال':'تعليم أطفال','توعية':'توعية','رفع التسويات':'تسويات','متابعة وتقييم':'متابعة','التمويل':'تمويل','تواصل ودعم':'تواصل','اصطفاف':'اصطفاف','Technical Support':'دعم فني','الإشراف والمتابعات الدورية':'إشراف','إطعام':'إطعام','أنشطة لوجيستية':'لوجستية','تفعيل المتطوعين':'تفعيل'};
+var UNIV_MAP = {
+  University_0: 'فريق اللجان المركزية', University_1: 'جامعة القاهرة',
+  University_2: 'جامعة بنها', University_3: 'جامعة MTI', University_4: 'جامعة الأزهر',
+  University_5: 'جامعة بني سويف', University_6: 'جامعة المنيا', University_7: 'جامعة جنوب الوادي',
+  University_8: 'جامعة سوهاج', University_9: 'جامعة أسوان', University_10: 'جامعة قناة السويس',
+  University_11: 'جامعة السويس', University_12: 'جامعة معهد العاشر من رمضان',
+  University_13: 'جامعة طنطا', University_14: 'جامعة معهد العاشر بمطروح',
+  University_15: 'جامعة المنصوره', University_16: 'جامعة المنوفية', University_17: 'جامعة السادات',
+  University_18: 'جامعة الريادة', University_19: 'جامعة اسكندرية', University_20: 'جامعة أسيوط',
+  University_21: 'جامعة eelu', University_22: 'جامعة سفنكس', University_23: 'جامعة الأزهر بالأقصر',
+  University_24: 'جامعة الأزهر بتفهنا الأشراف', University_25: 'جامعة مطروح',
+  University_26: 'جامعة الوادي الجديد', University_27: 'جامعة الأقصر الحكومية',
+  University_28: 'جامعة الأقصر الأهلية', University_29: 'جامعة سيناء', University_30: 'جامعة العريش',
+  University_31: 'جامعة EST', University_32: 'جامعة طيبة التكنولوجية',
+  University_33: 'معهد القاهرة العالى الجديد', University_34: 'جامعة اللوتس',
+  University_35: 'المعهد التكنولوچى العالى للعلوم التطبيقية',
+  University_36: 'المعهد العالى للخدمة الإجتماعية باسوان', University_37: 'جامعة الأهرام الكندية',
+  University_38: 'المعهد العالي للهندسة بالأقصر', University_39: 'جامعة المنوفية الأهلية',
+  University_40: 'جامعة المنصورة الاهلية', University_41: 'جامعة الزقازيق',
+  University_42: 'جامعة Merit', University_43: 'جامعة عين شمس',
+  University_44: 'معهد الخدمة الاجتماعية بقنا', University_45: 'جامعة قنا',
+  University_46: 'جامعة الأزهر فرع أسيوط'
+};
+
+function ar(m,v){return(v&&m[v])||v||''}
+
 var RAW = [], REG_DATA = [], FO = {}, REG_FO = {}, D = {}, RD = {}, curTab = 0;
 
 // ===== DARK MODE =====
@@ -224,11 +262,14 @@ function showStatus(type, msg){
 }
 
 // ===== DATA LOADING =====
+var API_URL = 'https://script.google.com/macros/s/AKfycbx9rqFN89qoxu7p7NBZN-ohlogdi8RicKYCIdU_2U1cdVOWPYGZ5Px3kaq6fpH0eAIB/exec';
 var loadTimeout = null;
+
+function showBusy(){document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div style="display:inline-block;width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#1e3a8a;border-radius:50%;animation:sp .6s linear infinite"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>'}
 
 function loadData(){
   showStatus('load','جاري الاتصال بالخادم...');
-  document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px;color:#64748b"><div style="display:inline-block;width:16px;height:16px;border:2px solid #e2e8f0;border-top-color:#1e3a8a;border-radius:50%;animation:sp .6s linear infinite"></div><div style="margin-top:12px;font-size:13px">جاري تحميل البيانات...</div></div>';
+  showBusy();
   var s=document.createElement('script');
   s.src=API_URL+'?callback=handleData&action=all&_t='+Date.now();
   document.head.appendChild(s);
@@ -238,6 +279,7 @@ function loadData(){
     document.getElementById('x').innerHTML='<div style="text-align:center;padding:40px"><div style="font-size:40px;margin-bottom:12px">⚠️</div><div style="font-size:14px;color:#64748b">المشكلة: الخادم لم يستجب بعد<br>الحل: افتح الرابط التالي أولاً في متصفحك وسَمح بالأذونات، ثم ارجع للداشبورد:<br><a href="'+API_URL+'" target="_blank" style="color:#2563eb;font-size:13px">افتح Web App للتجربة</a><br><br><button class="tb" style="background:#1e3a8a;color:#fff;border:none;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:13px;margin-top:8px" onclick="loadData()">🔄 إعادة المحاولة</button></div></div>'
   },20000)
 }
+
 function handleData(resp){
   if(loadTimeout){clearTimeout(loadTimeout);loadTimeout=null}
   if(resp.error){
@@ -245,8 +287,9 @@ function handleData(resp){
     return
   }
   showStatus('load','جاري معالجة البيانات...');
-  RAW=resp.activations||[];
-  REG_DATA=resp.registrations||[];
+  var allowed=Object.values(GOVS);
+  RAW=(resp.activations||[]).filter(function(r){return allowed.indexOf(r.gov)>=0});
+  REG_DATA=(resp.registrations||[]).filter(function(r){return allowed.indexOf(r.gov)>=0});
   FO=computeFO(RAW);
   REG_FO=computeRegFO(REG_DATA);
   document.getElementById('dr').textContent=FO.minDate+' → '+FO.maxDate;
@@ -268,12 +311,13 @@ function handleData(resp){
 }
 
 function computeFO(data){
-  var cents={},pros={},acts={},locs={};
+  var cents={},pros={},acts={},locs={},univs={};
   data.forEach(function(r){
     if(r.c)cents[r.c]=1;
     if(r.p)pros[r.p]=1;
     if(r.sa)acts[r.sa]=1;
-    if(r.l)locs[r.l]=1
+    if(r.l)locs[r.l]=1;
+    if(r.univ)univs[r.univ]=1
   });
   var dates=data.filter(function(r){return r.d}).map(function(r){return r.d}).sort();
   return {
@@ -281,25 +325,27 @@ function computeFO(data){
     projects:Object.keys(pros).sort(),
     activities:Object.keys(acts).sort(),
     locations:Object.keys(locs).sort(),
+    univs:Object.keys(univs).sort(),
     minDate:dates[0]||'',maxDate:dates[dates.length-1]||''
   }
 }
 
 function computeRegFO(data){
-  var govs={},sts={};
+  var govs={},sts={},univs={};
   data.forEach(function(r){
-    govs[r.gov]=1;sts[r.status]=1
+    govs[r.gov]=1;sts[r.status]=1;if(r.univ)univs[r.univ]=1
   });
   var dates=data.filter(function(r){return r.date}).map(function(r){return r.date}).sort();
   return {
     governorates:Object.keys(govs).sort(),
     statuses:Object.keys(sts).sort(),
+    univs:Object.keys(univs).sort(),
     minDate:dates[0]||'',maxDate:dates[dates.length-1]||''
   }
 }
 
 // ===== FILTERS =====
-var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode:'', gov:'', status:''};
+var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode:'', gov:'', status:'', univ:''};
 
 function buildFilters(){
   var opts=function(arr){return arr.map(function(v){return '<option>'+v+'</option>'}).join('')};
@@ -312,6 +358,8 @@ function buildFilters(){
   h+='<label>النشاط:</label><select id="fA"><option value="">الكل</option>'+opts(FO.activities)+'</select>';
   h+='<label>المكان:</label><select id="fL"><option value="">الكل</option>'+opts(FO.locations)+'</select>';
   h+='<label>النوع:</label><select id="fM"><option value="">الكل</option><option value="Online">أونلاين</option><option value="Offline">حضوري</option></select>';
+  var allUnivs=FO.univs.concat(REG_FO.univs).filter(function(v,i,a){return a.indexOf(v)===i}).sort();
+  h+='<label>الجامعة:</label><select id="fU"><option value="">الكل</option>'+opts(allUnivs)+'</select>';
   h+='<button class="fbtn" onclick="applyF()">تطبيق</button>';
   h+='<button class="fbtn2" onclick="resetF()">إعادة تعيين</button>';
   document.getElementById('fltrs').innerHTML=h
@@ -326,7 +374,8 @@ function readF(){
   F.project=document.getElementById('fP').value;
   F.activity=document.getElementById('fA').value;
   F.location=document.getElementById('fL').value;
-  F.mode=document.getElementById('fM').value
+  F.mode=document.getElementById('fM').value;
+  F.univ=document.getElementById('fU').value
 }
 function applyF(){readF();r(curTab)}
 function resetF(){
@@ -339,6 +388,7 @@ function resetF(){
   document.getElementById('fA').value='';
   document.getElementById('fL').value='';
   document.getElementById('fM').value='';
+  document.getElementById('fU').value='';
   applyF()
 }
 
@@ -351,6 +401,7 @@ function filterRows(){
     if(F.activity && r.sa !== F.activity) return false;
     if(F.location && r.l !== F.location) return false;
     if(F.mode && (F.mode==='Online' ? r.l!=='Online' : r.l==='Online')) return false;
+    if(F.univ && r.univ !== F.univ) return false;
     return true
   })
 }
@@ -359,6 +410,7 @@ function filterRegRows(){
   return REG_DATA.filter(function(r){
     if(F.gov && r.gov !== F.gov) return false;
     if(F.status && r.status !== F.status) return false;
+    if(F.univ && r.univ !== F.univ) return false;
     return true
   })
 }
