@@ -151,7 +151,7 @@ tr:hover td{background:rgba(30,58,138,.04)}
 <div class="container">
 
 <div class="hdr">
-  <h1>داشبورد التفعيلات والتسجيلات <small>المنوفية — الجيزة — أسيوط — مطروح — شمال سيناء</small></h1>
+  <h1>داشبورد التفعيلات والتسجيلات <small>كل المحافظات</small></h1>
   <div class="hdr-lft">
     <span class="dr" id="dr"></span>
     <button class="tb" id="dmBtn">🌙 ليلي</button>
@@ -183,8 +183,13 @@ tr:hover td{background:rgba(30,58,138,.04)}
 <script>
 // ====== خرائط الترجمة العربية ======
 var GOVS = {
-  EGY17: 'المنوفيه', EGY21: 'الجيزه', EGY25: 'اسيوط',
-  EGY33: 'مطروح', EGY34: 'شمال سيناء'
+  EGY01:'القاهره',EGY02:'الاسكندريه',EGY03:'بورسعيد',EGY04:'السويس',
+  EGY11:'دمياط',EGY12:'الدقهليه',EGY13:'الشرقيه',EGY14:'القليوبيه',
+  EGY15:'كفر الشيخ',EGY16:'الغربيه',EGY17:'المنوفيه',EGY18:'البحيره',
+  EGY19:'الاسماعيليه',EGY21:'الجيزه',EGY22:'بنى سويف',EGY23:'الفيوم',
+  EGY24:'المنيا',EGY25:'اسيوط',EGY26:'سوهاج',EGY27:'قنا',EGY28:'اسوان',
+  EGY29:'الاقصر',EGY31:'البحر الاحمر',EGY32:'الوادي الجديد',EGY33:'مطروح',
+  EGY34:'شمال سيناء',EGY35:'جنوب سيناء'
 };
 var PLACE_MAP = {Main:'فاعلية مركزية',Office:'داخل مقر المكتب / الجمعية',City:'أحد مراكز المحافظة',Village:'أحد قرى المحافظة',Online:'Online',central_office:'المقر المركزي للمؤسسة'};
 var ACT_MAP = {Attracting_receiving:'جذب واستقبال المتطوعين',Regular_meetings:'اجتماعات دورية',training:'تدريبات',Research_interviews:'أبحاث ومقابلات',Implementing_interventions:'تنفيذ تدخلات',Clothing_exhibitions:'معارض الملابس',Medical_convoys:'قوافل طبية',Events:'الفعاليات',Literacy:'محو الأمية',Teaching_children:'تعليم الأطفال',Awareness:'توعية',Raising_settlements:'رفع التسويات',Follow_evaluation:'متابعة وتقييم',fundraising:'التمويل',Communicate_support:'تواصل ودعم',Line_up:'اصطفاف',Technical_Support:'Technical Support',leadership_tasks:'الإشراف والمتابعات الدورية',feeding:'إطعام',Logistics_activities:'أنشطة لوجيستية',Activate_volunteers:'تفعيل المتطوعين'};
@@ -287,9 +292,8 @@ function handleData(resp){
     return
   }
   showStatus('load','جاري معالجة البيانات...');
-  var allowed=Object.values(GOVS);
-  RAW=(resp.activations||[]).filter(function(r){return allowed.indexOf(r.gov)>=0});
-  REG_DATA=(resp.registrations||[]).filter(function(r){return allowed.indexOf(r.gov)>=0});
+  RAW=resp.activations||[];
+  REG_DATA=resp.registrations||[];
   FO=computeFO(RAW);
   REG_FO=computeRegFO(REG_DATA);
   document.getElementById('dr').textContent=FO.minDate+' → '+FO.maxDate;
