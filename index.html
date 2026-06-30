@@ -830,7 +830,7 @@ function draw2(D2){
   vbar('a_acte',D2.acts.map(function(x){return x.n}),D2.acts.map(function(x){return x.e}),['#fef3c7','#fde68a','#fcd34d','#fbbf24','#f59e0b','#d97706','#b45309','#fef9c3','#fef08a']);
   hbar('a_cents',D2.cents.slice().reverse().map(function(x){return x.n+' ('+x.v+' متطوع)'}),D2.cents.slice().reverse().map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff']);
   hbar('a_locs',D2.locs.slice().reverse().map(function(x){return x.n}),D2.locs.slice().reverse().map(function(x){return x.h}),['#2563eb','#059669','#f59e0b','#dc2626','#0ea5e9']);
-  hbar('a_dets',D2.dets.slice().reverse().map(function(x){return x.n}),D2.dets.slice().reverse().map(function(x){return x.h}),p)
+  hbar('a_dets',D2.dets.slice(0,10).reverse().map(function(x){return x.n}),D2.dets.slice(0,10).reverse().map(function(x){return x.h}),p)
 }
 
 // ===== TAB 3 (Evaluation) =====
