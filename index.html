@@ -363,7 +363,7 @@ function buildFilters(){
   h+='<label>المكان:</label><select id="fL"><option value="">الكل</option>'+opts(FO.locations)+'</select>';
   h+='<label>النوع:</label><select id="fM"><option value="">الكل</option><option value="Online">أونلاين</option><option value="Offline">حضوري</option></select>';
   var allUnivs=FO.univs.concat(REG_FO.univs).filter(function(v,i,a){return a.indexOf(v)===i}).sort();
-  h+='<label>الجامعة:</label><select id="fU"><option value="">الكل</option>'+opts(allUnivs)+'</select>';
+  h+='<label>الجامعة:</label><select id="fU"><option value="">بدون فلتر</option><option value="__all">كل الجامعات</option>'+opts(allUnivs)+'</select>';
   h+='<button class="fbtn" onclick="applyF()">تطبيق</button>';
   h+='<button class="fbtn2" onclick="resetF()">إعادة تعيين</button>';
   document.getElementById('fltrs').innerHTML=h
@@ -399,7 +399,7 @@ function filterRows(){
     if(F.activity && r.sa !== F.activity) return false;
     if(F.location && r.l !== F.location) return false;
     if(F.mode && (F.mode==='Online' ? r.l!=='Online' : r.l==='Online')) return false;
-    if(F.univ && r.univ && r.univ !== F.univ) return false;
+    if(F.univ==='__all'){if(!r.univ)return false}else if(F.univ&&r.univ!==F.univ)return false;
     return true
   })
 }
@@ -408,7 +408,7 @@ function filterRegRows(){
   return REG_DATA.filter(function(r){
     if(F.gov && r.gov !== F.gov) return false;
     if(F.status && r.status !== F.status) return false;
-    if(F.univ && r.univ && r.univ !== F.univ) return false;
+    if(F.univ==='__all'){if(!r.univ)return false}else if(F.univ&&r.univ!==F.univ)return false;
     return true
   })
 }
