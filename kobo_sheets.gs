@@ -425,11 +425,23 @@ function importKoboIncremental() {
   var props = PropertiesService.getScriptProperties();
   var lastId = Number(props.getProperty(LAST_ID_KEY) || '0');
   var lastSync = Number(props.getProperty(LAST_FULL_SYNC) || '0');
+  var lastClean = Number(props.getProperty('KOBO_LAST_CLEAN') || '0');
   var now = Date.now();
   var needFullSync = (now - lastSync) > 172800000; // 48 ساعة
+  var needClean = (now - lastClean) > 21600000; // 6 ساعات
 
-  var records;
-  if (needFullSync) {
+  var records, isFullReset = false;
+  if (needClean) {
+    Logger.log('🧹 تنظيف كامل كل 6 ساعات — مسح وإعادة تحميل');
+    var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    var rs = ss.getSheetByName('التسجيلات'); if (rs) rs.clear();
+    var as = ss.getSheetByName('التفعيلات'); if (as) as.clear();
+    props.deleteProperty(LAST_ID_KEY); lastId = 0;
+    records = fetchAllFromKobo();
+    props.setProperty(LAST_FULL_SYNC, String(now));
+    props.setProperty('KOBO_LAST_CLEAN', String(now));
+    isFullReset = true;
+  } else if (needFullSync) {
     Logger.log('🔄 جلب كل الداتا (Full Sync للاعتماد)');
     records = fetchAllFromKobo();
     props.setProperty(LAST_FULL_SYNC, String(now));
@@ -440,17 +452,18 @@ function importKoboIncremental() {
 
   if (!records.length) { Logger.log('لا توجد سجلات جديدة'); return; }
 
-  var nReg = writeRegistrations(records, needFullSync);
-  var nAct = writeActivations(records, needFullSync);
+  var nReg = writeRegistrations(records, isFullReset || needFullSync);
+  var nAct = writeActivations(records, isFullReset || needFullSync);
+  cleanActivationsSheet();
   updateSummary();
 
-  // حفظ آخر _id
   var maxId = records.reduce(function(m, r) { return Math.max(m, Number(r._id) || 0); }, lastId);
   props.setProperty(LAST_ID_KEY, String(maxId));
 
   var elapsed = ((Date.now() - t0) / 1000).toFixed(1);
   Logger.log('انتهى | +' + nReg.new + ' تسجيل, +' + nAct.new + ' تفعيل | ' + elapsed + 's');
-  if (needFullSync) Logger.log('🔄 تم تحديث الاعتماد لكل السجلات');
+  if (isFullReset) Logger.log('🧹 تم التنظيف الكامل وإعادة التحميل');
+  else if (needFullSync) Logger.log('🔄 تم تحديث الاعتماد لكل السجلات');
 }
 
 // =============================================================
@@ -673,6 +686,19 @@ function updateSummary() {
 // =============================================================
 
 function updateAll() { importKoboIncremental(); }
+
+function cleanActivationsSheet() {
+  var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  var sheet = ss.getSheetByName('التفعيلات');
+  if (!sheet) return;
+  Logger.log('🧹 بدء تنظيف التفعيلات...');
+  sheet.createTextFinder('yes').matchCase(false).matchEntireCell(true).replaceAllWith('نعم');
+  sheet.createTextFinder('no').matchCase(false).matchEntireCell(true).replaceAllWith('لا');
+  sheet.createTextFinder('R1').matchCase(false).replaceAllWith('');
+  var lr = sheet.getLastRow();
+  if (lr > 1) sheet.getRange(2, 10, lr - 1, 1).createTextFinder('-').replaceAllWith('');
+  Logger.log('✅ انتهى تنظيف التفعيلات');
+}
 
 function resetKoboCheckpoint() {
   PropertiesService.getScriptProperties().deleteProperty(LAST_ID_KEY);
