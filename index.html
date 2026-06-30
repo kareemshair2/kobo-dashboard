@@ -463,11 +463,11 @@ function compute(rows){
     if(!dailyMap[r.d])dailyMap[r.d]={h:0,e:0};
     dailyMap[r.d].h+=(+r.h||0);dailyMap[r.d].e++
   });
-  out.dailys=Object.keys(dailyMap).filter(function(k){return k.length===10}).sort().map(function(k){
+  out.dailys=Object.keys(dailyMap).filter(function(k){return k&&k.length>=8}).sort().map(function(k){
     return {d:k,h:Math.round(dailyMap[k].h*10)/10,e:dailyMap[k].e}
   });
   var wMap={};rows.forEach(function(r){
-    if(!r.d||r.d.length<10)return;var d=new Date(r.d),wd=d.getDay(),ws=new Date(d);ws.setDate(d.getDate()-wd);
+    if(!r.d)return;var d=new Date(r.d),wd=d.getDay(),ws=new Date(d);ws.setDate(d.getDate()-wd);
     var wk=ws.toISOString().slice(0,10);
     if(!wMap[wk])wMap[wk]={h:0,e:0};wMap[wk].h+=(+r.h||0);wMap[wk].e++
   });
