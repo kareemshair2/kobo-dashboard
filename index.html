@@ -471,6 +471,14 @@ function compute(rows){
   out.dailys=Object.keys(dailyMap).filter(function(k){return k.length===10}).sort().map(function(k){
     return {d:k,h:Math.round(dailyMap[k].h*10)/10,e:dailyMap[k].e}
   });
+  var wMap={};rows.forEach(function(r){
+    if(!r.d||r.d.length<10)return;var d=new Date(r.d),wd=d.getDay(),ws=new Date(d);ws.setDate(d.getDate()-wd);
+    var wk=ws.toISOString().slice(0,10);
+    if(!wMap[wk])wMap[wk]={h:0,e:0};wMap[wk].h+=(+r.h||0);wMap[wk].e++
+  });
+  out.weeklies=Object.keys(wMap).sort().map(function(k){
+    return{d:k,h:Math.round(wMap[k].h*10)/10,e:wMap[k].e}
+  });
   var hdOrder=['0-3','3-5','5-7','7-9','9-12','12-16','16-24'];
   out.hd=hdOrder.map(function(l){return {l:l,c:hrs[l]||0}});
   out.sats=[
@@ -527,7 +535,7 @@ function hbar(id, la, va, co){
   var c=document.getElementById(id);if(!c)return;
   var H=c.height=c.parentElement.clientHeight||300;
   var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
-  var ctx=c.getContext('2d'),pl=160,pr=60,pt=8,pb=8,n=la.length;
+  var ctx=c.getContext('2d'),pl=160,pr=80,pt=8,pb=8,n=la.length;
   if(!n)return;var mx=Math.max.apply(null,va)||1,ttl=va.reduce(function(a,b){return a+b},0);
   var gap=Math.max(2,Math.min(4,H*0.02)),bh=Math.max(6,(H-pt-pb-gap*(n+1))/n);
   ctx.clearRect(0,0,W,H);
@@ -535,8 +543,9 @@ function hbar(id, la, va, co){
     var y=pt+gap+i*(bh+gap),bw=Math.max(3,(va[i]/mx)*(W-pl-pr));
     ctx.fillStyle=co[i%co.length];ctx.beginPath();
     if(ctx.roundRect)ctx.roundRect(pl,y,bw,bh,2);else ctx.rect(pl,y,bw,bh);ctx.fill();
-    ctx.fillStyle=txC();ctx.font='bold 11px Arial';ctx.textAlign='right';ctx.textBaseline='middle';
-    ctx.fillText(fmt(va[i])+' ('+pct(va[i],ttl)+'%)',pl+bw+4,y+bh/2);
+    var valTxt=fmt(va[i])+'  ('+pct(va[i],ttl)+'%)';
+    ctx.fillStyle=isDark()?'#fcd34d':'#1e3a8a';ctx.font='bold 11px Arial';ctx.textAlign='right';ctx.textBaseline='middle';
+    ctx.fillText(valTxt,Math.min(pl+bw+100,W-4),y+bh/2);
     ctx.fillStyle=t2C();ctx.font='11px Arial';ctx.textAlign='left';ctx.textBaseline='middle';
     ctx.fillText(la[i],pl,y+bh/2)
   }
@@ -545,7 +554,7 @@ function vbar(id,la,va,co){
   var c=document.getElementById(id);if(!c)return;
   var H=c.height=c.parentElement.clientHeight||300;
   var W=c.width=Math.max(c.parentElement.clientWidth||450,300);
-  var ctx=c.getContext('2d'),pt=22,pb=35,pl=6,pr=6;
+  var ctx=c.getContext('2d'),pt=32,pb=40,pl=6,pr=6;
   var mx=Math.max.apply(null,va)||1,n=la.length;if(!n)return;
   var gap=Math.max(3,W*0.03),bw=Math.max(8,(W-pl-pr-gap*(n+1))/n);
   ctx.clearRect(0,0,W,H);
@@ -553,8 +562,8 @@ function vbar(id,la,va,co){
     var x=pl+gap+i*(bw+gap),bh=Math.max(2,(va[i]/mx)*(H-pt-pb)),y2=H-pb-bh;
     ctx.fillStyle=co[i%co.length];ctx.beginPath();
     if(ctx.roundRect&&bw>5)ctx.roundRect(x,y2,bw,bh,2);else ctx.rect(x,y2,bw,bh);ctx.fill();
-    ctx.fillStyle=txC();ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
-    ctx.fillText(fmt(va[i]),x+bw/2,Math.max(y2-2,10));
+    ctx.fillStyle=isDark()?'#fcd34d':'#1e3a8a';ctx.font='bold 11px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText(fmt(va[i]),x+bw/2,Math.max(y2-4,10));
     ctx.fillStyle=t2C();ctx.font='9px Arial';ctx.textAlign='center';ctx.textBaseline='top';
     ctx.fillText(la[i],x+bw/2,H-pb+2)
   }
@@ -579,13 +588,13 @@ function line(id, data){
   for(var i=0;i<n;i++){var x=pl+i*step,y=pt+(H-pt-pb)*(1-data[i].h/maxV);
     if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
   ctx.stroke();
-  var le=Math.max(1,Math.floor(n/12));
+  var le=Math.max(1,Math.floor(n/10));
   for(var i=0;i<n;i++){var x=pl+i*step,y=pt+(H-pt-pb)*(1-data[i].h/maxV);
-    ctx.beginPath();ctx.arc(x,y,3.5,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();
-    ctx.beginPath();ctx.arc(x,y,1.5,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
-    ctx.fillStyle=txC();ctx.font='bold 8px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
-    ctx.fillText(fmt(data[i].h),x,Math.max(y-4,6));
-    if(i%le===0){ctx.fillStyle=t2C();ctx.font='7px Arial';ctx.textAlign='center';ctx.textBaseline='top';
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle='#2563eb';ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,2,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();
+    ctx.fillStyle=isDark()?'#fcd34d':'#1e3a8a';ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.textBaseline='bottom';
+    ctx.fillText(fmt(data[i].h),x,Math.max(y-6,8));
+    if(i%le===0){ctx.fillStyle=t2C();ctx.font='8px Arial';ctx.textAlign='center';ctx.textBaseline='top';
       ctx.fillText(data[i].d.slice(5),x,H-pb+4)}}
 }
 function donut(id,la,va,co){
@@ -665,6 +674,7 @@ function genInsights(D2){
   if(D2.tops.length) items.push('أكثر متطوع: <strong>'+D2.tops[0].n+'</strong> ('+fmt(D2.tops[0].h)+' س)');
   items.push('إجمالي: <strong>'+D2.entries+'</strong> تفعيلة، <strong>'+fmt(D2.hours)+'</strong> س، <strong>'+D2.vols+'</strong> متطوع');
   items.push('فترة: <strong>'+D2.dailys.length+'</strong> يوم');
+  items.push('أسابيع: <strong>'+D2.weeklies.length+'</strong> أسبوع');
   return items
 }
 
@@ -734,7 +744,7 @@ function r(i){curTab=i;
 // ===== TAB 0 (Overview) =====
 function tab0(D2){
   return '<div class="grid">'+
-    '<div class="card fu"><h3>الساعات اليومية <span class="bdg">'+fmt(D2.hours)+' س</span>'+eBtn('o_line')+'</h3><div class="cw-lg"><canvas id="o_line"></canvas></div></div>'+
+    '<div class="card fu"><h3>الساعات الأسبوعية <span class="bdg">'+fmt(D2.hours)+' س</span>'+eBtn('o_line')+'</h3><div class="cw-lg"><canvas id="o_line"></canvas></div></div>'+
     '<div class="card"><h3>توزيع ساعات المتطوعين'+eBtn('o_hdist')+'</h3><div class="cw"><canvas id="o_hdist"></canvas></div></div>'+
     '<div class="card fu"><h3>الأنشطة الرئيسية'+eBtn('o_acts')+'</h3><div class="cw-lg"><canvas id="o_acts"></canvas></div></div>'+
     '<div class="card"><h3>المراكز الأكثر نشاطاً'+eBtn('o_cents')+'</h3><div class="cw-lg"><canvas id="o_cents"></canvas></div></div>'+
@@ -760,7 +770,7 @@ function tab0(D2){
       '<div class="mi-it" style="border-color:#0891b2"><div class="mv" style="color:#0891b2">'+RD.govCount+'</div><div class="ml">محافظات</div></div></div></div></div>'
 }
 function draw0(D2){
-  line('o_line',D2.dailys);
+  line('o_line',D2.weeklies);
   vbar('o_hdist',D2.hd.map(function(x){return x.l+'س'}),D2.hd.map(function(x){return x.c}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#f59e0b','#d97706','#dc2626']);
   hbar('o_acts',D2.acts.map(function(x){return x.n}),D2.acts.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#f59e0b','#d97706','#059669','#34d399','#7c3aed','#0ea5e9','#14b8a6','#dc2626','#ef4444','#f97316']);
   hbar('o_cents',D2.cents.map(function(x){return x.n+' ('+x.v+' متطوع)'}),D2.cents.map(function(x){return x.h}),['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe','#eff6ff']);
