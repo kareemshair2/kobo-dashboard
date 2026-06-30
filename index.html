@@ -353,7 +353,8 @@ var F = {dFrom:'', dTo:'', center:'', project:'', activity:'', location:'', mode
 
 function buildFilters(){
   var opts=function(arr){return arr.map(function(v){return '<option>'+v+'</option>'}).join('')};
-  var h='<label>من:</label><input type="date" id="fDf" value="'+FO.minDate+'" style="max-width:110px">';
+  var defFrom=FO.minDate>'2026-01-01'?FO.minDate:'2026-01-01';
+  var h='<label>من:</label><input type="date" id="fDf" value="'+defFrom+'" style="max-width:110px">';
   h+='<label>إلى:</label><input type="date" id="fDt" value="'+FO.maxDate+'" style="max-width:110px">';
   h+='<label>المحافظة:</label><select id="fG"><option value="">الكل</option>'+opts(REG_FO.governorates)+'</select>';
   h+='<label>حالة التسجيل:</label><select id="fS"><option value="">الكل</option>'+opts(REG_FO.statuses)+'</select>';
@@ -377,7 +378,7 @@ function readF(nr){
 }
 function applyF(){readF();r(curTab)}
 function resetF(){
-  document.getElementById('fDf').value=FO.minDate;
+  document.getElementById('fDf').value=FO.minDate>'2026-01-01'?FO.minDate:'2026-01-01';
   document.getElementById('fDt').value=FO.maxDate;
   document.getElementById('fG').value='';
   document.getElementById('fS').value='';
