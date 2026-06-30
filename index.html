@@ -692,6 +692,9 @@ function genInsights(D2){
   items.push('إجمالي: <strong>'+D2.entries+'</strong> تفعيلة، <strong>'+fmt(D2.hours)+'</strong> س، <strong>'+D2.vols+'</strong> متطوع');
   items.push('فترة: <strong>'+D2.dailys.length+'</strong> يوم');
   items.push('أسابيع: <strong>'+D2.weeklies.length+'</strong> أسبوع');
+  if(D2.univAct.length) items.push('أكثر جامعة تفعيلات: <strong>'+D2.univAct[0].n+'</strong> ('+fmt(D2.univAct[0].h)+' س، '+D2.univAct[0].e+' تفعيلة)');
+  if(D2.univAct.length>1) items.push('ثاني أكثر جامعة: <strong>'+D2.univAct[1].n+'</strong> ('+fmt(D2.univAct[1].h)+' س)');
+  items.push('عدد جامعات التفعيلات: <strong>'+D2.univAct.length+'</strong>');
   return items
 }
 
@@ -705,6 +708,11 @@ function genRegInsights(D2){
   var best=D2.govs.filter(function(g){return g.t>0}).sort(function(a,b){return b.accPct-a.accPct});
   if(best.length) items.push('أعلى نسبة قبول: <strong>'+best[0].n+'</strong> ('+best[0].accPct+'%)');
   items.push('عدد المحافظات: <strong>'+D2.govCount+'</strong>');
+  if(D2.univsR.length) items.push('أكبر جامعة تسجيلات: <strong>'+D2.univsR[0].n+'</strong> ('+D2.univsR[0].t+' متطوع)');
+  if(D2.univsR.length>1) items.push('ثاني أكبر جامعة: <strong>'+D2.univsR[1].n+'</strong> ('+D2.univsR[1].t+' متطوع)');
+  var bestU=D2.univsR.filter(function(u){return u.t>0}).sort(function(a,b){return b.accPct-a.accPct});
+  if(bestU.length) items.push('أعلى جامعة نسبة قبول: <strong>'+bestU[0].n+'</strong> ('+bestU[0].accPct+'%)');
+  items.push('عدد الجامعات: <strong>'+D2.univCount+'</strong>');
   return items
 }
 
